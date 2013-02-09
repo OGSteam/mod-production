@@ -9,10 +9,16 @@
 *	modified	: 10:34 05/09/2009 
 ***************************************************************************/
 
-//error_reporting(E_ALL)
+error_reporting(E_ALL);
 
 
 if (!defined('IN_SPYOGAME')) die("Hacking attempt");
+
+//Seulement temporaire afin de mettre à jour les formules dans ogame.php
+// if (file_exists('./mod/production/ogame.php')) {
+    // copy('./mod/production/ogame.php', './includes/ogame.php');
+    // unlink('./mod/production/ogame.php');
+// }
 
 require_once("views/page_header.php");
 $start = 101;
@@ -20,11 +26,13 @@ $nb_planet = $start + find_nb_planete_user() - 1;
 $filename = "mod/production/version.txt";
 if (file_exists($filename)) $file = file($filename);
 $mod_version = trim($file[1]);
-$forum_link = "http://ogsteam.fr/sujet-1528";
+//$forum_link = "http://ogsteam.fr/sujet-1528";
+$forum_link = "http://ogsteam.fr/";
 $creator_name = "<a href=mailto:jojolam44@hotmail.com>Jojo.lam44</a> &copy; 2006<br />";
 $modifier_name1 = "<a href=mailto:kalnightmare@free.fr>Kal Nightmare</a> &copy;2006";
 $modifier_name2 = "<a href=mailto:gon.freecks@gmail.com>Scaler</a> &copy; 2007";
-$updator_name = "<a>Shad</a> &copy; 2011";
+$modifier_name3 = "<a>Shad</a> &copy; 2011";
+$updator_name = "<a>Pitch314</a> &copy; 2013";
 
 // Récupération des chaines de langue
 require_once("mod/production/lang/lang_fr.php");
@@ -63,6 +71,12 @@ if (isset($_POST['techno_energie'])) {
 		$request = "update ".TABLE_USER_TECHNOLOGY." set NRJ = ".$_POST['techno_energie']." where user_id = ".$user_data["user_id"];
 		$db->sql_query($request);
 	}
+    if (isset($_POST['techno_plasma'])) {
+        if (is_numeric($_POST['techno_plasma'])) {
+            $request = "update ".TABLE_USER_TECHNOLOGY." set Plasma = ".$_POST['techno_plasma']." where user_id = ".$user_data["user_id"];
+            $db->sql_query($request);
+        }
+    }
 	$ingenieur = $geologue = '0';
 	if (isset($_POST['ingenieur']) && $_POST['ingenieur'] == 'on') $ingenieur = '1';
 	if (isset($_POST['geologue']) && $_POST['geologue'] == 'on') $geologue = '1';
@@ -95,6 +109,8 @@ else $user_technology = '0';
 $query = mysql_fetch_assoc(mysql_query("SELECT `off_ingenieur`, `off_geologue` FROM ".TABLE_USER." WHERE `user_id` = ".$user_data["user_id"]));
 $ingenieur = $query["off_ingenieur"];
 $geologue = $query["off_geologue"];
+//Récupération des informatitions sur la techno plasma
+$techno_plasma = $user_technology['Plasma'];
 
 // Réparation des informations sur la vitesse univers
 //$query = mysql_fetch_assoc(mysql_query("SELECT `config_value` FROM ".TABLE_CONFIG." WHERE config_name = 'speed_uni'"));
@@ -149,6 +165,7 @@ for ($i=$start;$i<=$nb_planet;$i++) {
 	echo "document.getElementById('global".$j."').checked = true;\n";
 }
 echo "document.getElementById('techno_energie').value = ".$user_technology['NRJ'].";\n";
+echo "document.getElementById('techno_plasma').value = ".$user_technology['Plasma'].";\n";
 echo "document.getElementById('ingenieur').checked = ";
 if ($ingenieur == 1) echo "true;\n";
 else echo "false;\n";
@@ -160,8 +177,15 @@ verif_donnee ();
 }
 function add (bat,plan,inc) {
 bati = new Array('','M','C','D','SoP','FR','SS');
-if (bat != 7) document.getElementById(bati[bat] + plan).value = parseFloat(document.getElementById(bati[bat] + plan).value) + inc;
-else document.getElementById('techno_energie').value = parseFloat(document.getElementById('techno_energie').value) + inc;
+if (bat == 7) {
+        document.getElementById('techno_energie').value = parseFloat(document.getElementById('techno_energie').value) + inc;
+} else {
+    if (bat == 8) {
+        document.getElementById('techno_plasma').value = parseFloat(document.getElementById('techno_plasma').value) + inc;
+    } else {
+        document.getElementById(bati[bat] + plan).value = parseFloat(document.getElementById(bati[bat] + plan).value) + inc;
+    }
+}
 verif_donnee ();
 }
 function selection (sel) {
@@ -192,6 +216,7 @@ for ($i=$start;$i<=$nb_planet;$i++){
 }
 ?>
 if ((isNaN(parseFloat(document.getElementById('techno_energie').value))) || parseFloat(document.getElementById('techno_energie').value) < 0 ) document.getElementById('techno_energie').value = technologieNRJ;
+if ((isNaN(parseFloat(document.getElementById('techno_plasma').value))) || parseFloat(document.getElementById('techno_plasma').value) < 0 ) document.getElementById('techno_plasma').value = technologiePlasma;
 ingenieur = 1;
 if (document.getElementById('ingenieur').checked) ingenieur = 1.1;
 geologue = 1;
@@ -212,6 +237,7 @@ for ($b=1;$b<=6;$b++){
 }
 ?>
 technologieNRJ = parseFloat(document.getElementById('techno_energie').value);
+technologiePlasma = parseFloat(document.getElementById('techno_plasma').value);
 calcul ();
 }
 function calcul () {
@@ -241,11 +267,13 @@ for (i=start;i<=nb_planet;i++) {
 		ratio[i] = Math.floor((prod_energie/cons_energie)*100)/100;
 		if (ratio[i] > 1) ratio[i] = 1;
 		if (cons_energie == 1) energie[i] = 0;
-
-		metal_heure[i] = vitesse * Math.floor((30 + Math.round((donnee['rap_M'][i]/100)*ratio[i]*Math.floor(30 * donnee['M'][i] * Math.pow(1.1, donnee['M'][i])))) * geologue);
-		cristal_heure[i] = vitesse * Math.floor((15 + Math.round((donnee['rap_C'][i]/100)*ratio[i]*Math.floor(20 * donnee['C'][i]* Math.pow(1.1, donnee['C'][i])))) * geologue);
-//		deut_heure[i] = vitesse * Math.floor(Math.round((donnee['rap_D'][i]/100)*ratio[i]*Math.floor(10 * donnee['D'][i] * Math.pow(1.1, donnee['D'][i]) * (-0.002 * batimentsOGSpy[i][7] + 1.28))) * geologue - Math.round((donnee['rap_FR'][i]/100) * 10 * donnee['FR'][i] * Math.pow(1.1, donnee['FR'][i])));
+		metal_heure[i] = vitesse * Math.floor((30 + Math.round((donnee['rap_M'][i]/100)*ratio[i]*Math.floor(30 * donnee['M'][i] * Math.pow(1.1, donnee['M'][i])))) * (geologue + 0.01 * technologiePlasma));
+		cristal_heure[i] = vitesse * Math.floor((15 + Math.round((donnee['rap_C'][i]/100)*ratio[i]*Math.floor(20 * donnee['C'][i]* Math.pow(1.1, donnee['C'][i])))) * (geologue + 0.0066 * technologiePlasma));
         deut_heure[i] = vitesse * Math.floor(Math.round((donnee['rap_D'][i]/100)*ratio[i]*Math.floor(10 * donnee['D'][i] * Math.pow(1.1, donnee['D'][i]) * (1.44 - (0.004 * batimentsOGSpy[i][7])))) * geologue - Math.round((donnee['rap_FR'][i]/100) * 10 * donnee['FR'][i] * Math.pow(1.1, donnee['FR'][i])));
+        
+        // metal_heure[i] = vitesse * Math.floor(30 + donnee['rap_M'][i]/100 * ratio[i] * 30 * donnee['M'][i] * Math.pow(1.1, donnee['M'][i]) * (geologue + 0.01 * technologiePlasma);
+        // cristal_heure[i] = vitesse * Math.floor(15 + donnee['rap_C'][i]/100 * ratio[i] * 20 * donnee['C'][i] * Math.pow(1.1, donnee['C'][i]) * (geologue + 0.0066 * technologiePlasma);
+        // deut_heure[i] = vitesse * Math.floor(donnee['rap_D'][i]/100 * ratio[i] * 10 * donnee['D'][i] * Math.pow(1.1, donnee['D'][i]) * (1.44 - 0.004 * batimentsOGSpy[i][7]) * geologue - Math.round((donnee['rap_FR'][i]/100) * 10 * donnee['FR'][i] * Math.pow(1.1, donnee['FR'][i]));
 
     var j = i-100;
     if (global[j] == 1) {
@@ -395,7 +423,9 @@ echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
 </tr>
 <tr><th><a><?php echo $lang['prod_technology_En'];?></a></th>
 	<th><img style='cursor: pointer;vertical-align: middle;' src='images/action_remove.png' alt='-' onClick='javascript:add (7,0,-1)' /><input type='text' id='techno_energie' name='techno_energie' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><img style='cursor: pointer;vertical-align: middle;' src='images/action_add.png' alt='+' onClick='javascript:add (7,0,1)' /></th>
-	<th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_E'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_E_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='ingenieur' name='ingenieur' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_E'];?></a></label></th>
+	<th><a><?php echo $lang['prod_technology_Pl'];?></a></th>
+	<th><img style='cursor: pointer;vertical-align: middle;' src='images/action_remove.png' alt='-' onClick='javascript:add (8,0,-1)' /><input type='text' id='techno_plasma' name='techno_plasma' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><img style='cursor: pointer;vertical-align: middle;' src='images/action_add.png' alt='+' onClick='javascript:add (8,0,1)' /></th>
+    <th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_E'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_E_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='ingenieur' name='ingenieur' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_E'];?></a></label></th>
 	<th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_G'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_G_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='geologue' name='geologue' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_G'];?></a></label></th>
 </tr>
 </form>
@@ -484,7 +514,7 @@ for ($i=101;$i<=$nb_planet;$i++) {
 </table>
 <br/>
 <?php
-echo "<div align=center><font size='2'>".sprintf($lang['prod_created_by'],$mod_version,$creator_name,$modifier_name1,$modifier_name2)."</font><br />".
+echo "<div align=center><font size='2'>".sprintf($lang['prod_created_by'],$mod_version,$creator_name,$modifier_name1,$modifier_name2,$modifier_name3)."</font><br />".
 "<div align=center><font size='2'>".sprintf($lang['prod_updated_by'],$mod_version,$updator_name)."</font><br />".
 	"<font size='1'><a href='".$forum_link."' target='_blank'>".$lang['prod_forum']."</a>.</font></div>";
 require_once("views/page_tail.php");

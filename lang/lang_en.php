@@ -22,7 +22,7 @@ $lang['prod_coordinates'] = "Coordinates";
 $lang['prod_temperature'] = "Maximal temperature";
 $lang['prod_fields'] = "Fields";
 $lang['prod_energy'] = "Energy";
-$lang['prod_created_by'] = "Mod Production v"./*$mod_version*/"%s developed by "./*$creator_name*/"%2\$s modified by "./*$modifier_name1*/"%3\$s and "./*$modifier_name2*/"%4\$s";
+$lang['prod_created_by'] = "Mod Production v"./*$mod_version*/"%s developed by "./*$creator_name*/"%2\$s modified by "./*$modifier_name1*/"%3\$s, "./*$modifier_name2*/"%4\$s and "./*$modifier_name3*/"%5\$s";
 $lang['prod_updated_by'] = "Mod Production v"./*$mod_version*/"%s updated by "./*$updator_name*/"%2\$s";
 $lang['prod_forum'] = "more information";
 
@@ -40,6 +40,7 @@ $lang['prod_SS'] = "Solar Satellite";
 // Technologies and Officers
 $lang['prod_tech_off'] = "Technologies and Officers";
 $lang['prod_technology_En'] = "Energy Technology";
+$lang['prod_technology_Pl'] = "Plasma Technology";
 $lang['prod_officer_E'] = "Engineer Officer";
 $lang['prod_officer_E_help'] = "+10% energy";
 $lang['prod_officer_G'] = "Geologist Officer";
