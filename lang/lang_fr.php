@@ -45,6 +45,8 @@ $lang['prod_officer_E'] = "Officier Ingénieur";
 $lang['prod_officer_E_help'] = "+10% d\'énergie";
 $lang['prod_officer_G'] = "Officier Géologue";
 $lang['prod_officer_G_help'] = "+10% de production";
+$lang['prod_officer_full'] = "Full officiers";
+$lang['prod_officer_full_help'] = "+12% de production et d\'énergie";
 
 // Production
 $lang['prod_prod_hour'] = "Production par heure";
