@@ -412,7 +412,7 @@ for ($i=$start;$i<=$nb_planet;$i++) echo "\t<th><font color='lime'><span id='ene
 for ($b=1;$b<=5;$b++) {
 	echo "<tr><th><a>".$lang['prod_building_'.$bati[$b]]."</a></th>";
 	for ($i=$start;$i<=$nb_planet;$i++) {
-		echo "\t<th><img style='cursor: pointer;vertical-align: middle;' src='images/action_remove.png' alt='-' onClick='javascript:add (".$b.",".$i.",-1)' /><input type='text' id='".$bati[$b].$i."' name='".$bati[$b].$i."' size='2' maxlength='2' onBlur='javascript:verif_donnee (0)' value='0'><img style='cursor: pointer;vertical-align: middle;' src='images/action_add.png' alt='+' onClick='javascript:add (".$b.",".$i.",1)' />\n";
+		echo "\t<th><a style='cursor: pointer;vertical-align: middle;'  onClick='javascript:add (".$b.",".$i.",-1)'>-</a><input type='text' id='".$bati[$b].$i."' name='".$bati[$b].$i."' size='2' maxlength='2' onBlur='javascript:verif_donnee (0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (".$b.",".$i.",1)'>+</a>\n";
 		echo "\t\t<select id='rap_".$bati[$b].$i."' name='rap_".$bati[$b].$i."' onChange='javascript:verif_donnee (0)'>";
 		for ($j=100;$j>=0;$j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
 		echo "</select></th>\n";
@@ -422,7 +422,7 @@ for ($b=1;$b<=5;$b++) {
 echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
 	for ($i=$start;$i<=$nb_planet;$i++) {
 		echo "<input type='hidden' name='planete".$i."' value='".$Planete[$i]."'>";
-		echo "\t<th><img style='cursor: pointer;vertical-align: middle;' src='images/action_remove.png' alt='-' onClick='javascript:add (6,".$i.",-1)' /><input type='text' id='".$bati[6].$i."' name='".$bati[6].$i."' size='2' maxlength='6' onBlur=\"javascript:verif_donnee (0)\" value='0'><img style='cursor: pointer;vertical-align: middle;' src='images/action_add.png' alt='+' onClick='javascript:add (6,".$i.",1)' />\n";
+		echo "\t<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (6,".$i.",-1)'>-</a><input type='text' id='".$bati[6].$i."' name='".$bati[6].$i."' size='2' maxlength='6' onBlur=\"javascript:verif_donnee (0)\" value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (6,".$i.",1)'>+</a>\n";
 		echo "\t\t<select id='rap_".$bati[6].$i."' name='rap_".$bati[6].$i."' onChange='javascript:add (6,".$i.",1)'>";
 		for ($j=100; $j>=0; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
 		echo "</select></th>\n";
@@ -433,9 +433,9 @@ echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
 <td class="c" colspan="<?php echo $nb_planet;?>"><?php echo $lang['prod_tech_off'];?></td>
 </tr>
 <tr><th><a><?php echo $lang['prod_technology_En'];?></a></th>
-	<th><img style='cursor: pointer;vertical-align: middle;' src='images/action_remove.png' alt='-' onClick='javascript:add (7,0,-1)' /><input type='text' id='techno_energie' name='techno_energie' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><img style='cursor: pointer;vertical-align: middle;' src='images/action_add.png' alt='+' onClick='javascript:add (7,0,1)' /></th>
+	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (7,0,-1)'>-</a><input type='text' id='techno_energie' name='techno_energie' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (7,0,1)'>+</a></th>
 	<th><a><?php echo $lang['prod_technology_Pl'];?></a></th>
-	<th><img style='cursor: pointer;vertical-align: middle;' src='images/action_remove.png' alt='-' onClick='javascript:add (8,0,-1)' /><input type='text' id='techno_plasma' name='techno_plasma' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><img style='cursor: pointer;vertical-align: middle;' src='images/action_add.png' alt='+' onClick='javascript:add (8,0,1)' /></th>
+	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,-1)'>-</a><input type='text' id='techno_plasma' name='techno_plasma' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,1)'>+</a></th>
     <th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_E'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_E_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='ingenieur' name='ingenieur' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_E'];?></a></label></th>
 	<th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_G'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_G_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='geologue' name='geologue' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_G'];?></a></label></th>
     <th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_full'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_full_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='full_off' name='fulloff' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_full'];?></a></label></th>
@@ -468,7 +468,7 @@ for ($b=1;$b<=3;$b++) {
 <tr>
 	<td class="c" colspan="<?php echo $nb_planet+1;?>">
 <?php
-echo $lang['prod_total_prod']."</td>\n</tr>\n<tr><th><table width='100%' style='border:none'><tr><th style='border:none'><img style='cursor: pointer;vertical-align: middle;' src='images/action_delete.png' onClick='javascript:selection (0)' alt='-' title='".$lang['prod_none']."' /></th><th style='border:none'><a>".$lang['prod_account']."</a></th><th style='border:none'><img style='cursor: pointer;vertical-align: middle;' src='images/action_check.png' onClick='javascript:selection (1)' alt='+' title='".$lang['prod_all']."' /></th></tr></table></th>\n";
+echo $lang['prod_total_prod']."</td>\n</tr>\n<tr><th><table width='100%' style='border:none'><tr><th style='border:none'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:selection (0)' title='".$lang['prod_none']."'>-</a></th><th style='border:none'><a>".$lang['prod_account']."</a></th><th style='border:none'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:selection (1)' title='".$lang['prod_all']."'>+</a></th></tr></table></th>\n";
 for ($i=101;$i<=$nb_planet;$i++) {
     $j=$i -100;
 	echo "\t<th><label><input type='";
