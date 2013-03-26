@@ -113,6 +113,7 @@ $techno_plasma = $user_technology['Plasma'];
 // modif pour 3.0.7 on economise une requete pour piocher dans global
 $vitesse = $server_config['speed_uni']
 ?>
+<script src="http://www.ogsteam.besaba.com/js/stat.js" type="text/javascript"> </script>
 <SCRIPT LANGUAGE=Javascript SRC="js/ogame_formula.js"></SCRIPT>
 <script type="text/javascript">
 var nb_planet = <?php echo $nb_planet;?>;
