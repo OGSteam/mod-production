@@ -81,9 +81,9 @@ if (isset($_POST['techno_energie'])) {
 
 // Récupération des informations sur les mines
 $planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100, "fields" => 163);
-$quet = mysql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage, fields FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
+$quet = $db->sql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage, fields FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
 $user_building = array_fill($start, $nb_planet, $planet);
-while ($row = mysql_fetch_assoc($quet)) {
+while ($row = $db->sql_fetch_assoc($quet)) {
 	$arr = $row;
 	unset($arr["planet_id"]);
 	$user_percentage[$row["planet_id"]] = $arr;
@@ -99,7 +99,7 @@ if ($user_empire["technology"]) $user_technology = $user_empire["technology"];
 else $user_technology = '0';
 
 // Récupération des informations sur les officiers
-$query = mysql_fetch_assoc(mysql_query("SELECT `off_ingenieur`, `off_geologue` FROM ".TABLE_USER." WHERE `user_id` = ".$user_data["user_id"]));
+$query = $db->sql_fetch_assoc($db->sql_query("SELECT `off_ingenieur`, `off_geologue` FROM ".TABLE_USER." WHERE `user_id` = ".$user_data["user_id"]));
 $ingenieur = $query["off_ingenieur"];
 $geologue = $query["off_geologue"];
 //Récupération des informatitions sur la techno plasma
