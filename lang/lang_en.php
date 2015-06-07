@@ -17,7 +17,7 @@ $lang['prod_uction'] = "Production";
 $lang['prod_uction_mod'] = "Mod Production";
 $lang['prod_save'] = "Save";
 $lang['prod_reset'] = "Reset";
-$lang['prod_planete'] = "Planete";
+$lang['prod_planete'] = "Planet";
 $lang['prod_coordinates'] = "Coordinates";
 $lang['prod_temperature'] = "Maximal temperature";
 $lang['prod_fields'] = "Fields";
@@ -63,6 +63,6 @@ $lang['prod_D'] = "Deuterium";
 $lang['prod_points'] = "Points";
 $lang['prod_ratio'] = "Ratio";
 $lang['prod_ref'] = "Click to use as reference";
-$lang['prod_all'] = "Click to select all planete";
-$lang['prod_none'] = "Click to unselect all planete";
+$lang['prod_all'] = "Click to select all planet";
+$lang['prod_none'] = "Click to unselect all planet";
 ?>

@@ -3,7 +3,7 @@
 *	filename	: production.php
 *	package		: Mod Production
 *	version		: 1.4a
-*	desc.			: Calcul de la production minière
+*	desc.			: Calcul de la production miniÃ¨re
 *	Authors		: Kal Nightmare & Scaler - http://ogsteam.fr
 *	created		: 10:30 08/11/2007
 *	modified	: 10:34 05/09/2009 
@@ -27,12 +27,12 @@ $modifier_name2 = "<a href=mailto:gon.freecks@gmail.com>Scaler</a> &copy; 2007";
 $modifier_name3 = "<a>Shad</a> &copy; 2011";
 $updator_name = "<a>Pitch314</a> &copy; 2013";
 
-// Récupération des chaines de langue
+// RÃ©cupÃ©ration des chaines de langue
 require_once("mod/production/lang/lang_fr.php");
 //if (file_exists("mod/production/lang/lang_".$server_config['language'].".php")) require_once("mod/production/lang/lang_".$server_config['language'].".php");
 //if (file_exists("mod/production/lang/lang_".$user_data['user_language'].".php")) require("mod/production/lang/lang_".$user_data['user_language'].".php");
 
-// Enregistrement des données
+// Enregistrement des donnÃ©es
 for ($i=$start;$i<=$nb_planet;$i++) {
 	if (isset($_POST['planete'.$i])) {
 		if ($_POST['planete'.$i] == 1) {
@@ -58,7 +58,7 @@ for ($i=$start;$i<=$nb_planet;$i++) {
 	}
 }
 
-// Récupération des informations sur l'énergie et les officiers
+// RÃ©cupÃ©ration des informations sur l'Ã©nergie et les officiers
 if (isset($_POST['techno_energie'])) {
 	if (is_numeric($_POST['techno_energie'])) {
 		$request = "update ".TABLE_USER_TECHNOLOGY." set NRJ = ".$_POST['techno_energie']." where user_id = ".$user_data["user_id"];
@@ -79,7 +79,7 @@ if (isset($_POST['techno_energie'])) {
 	$db->sql_query($request);
 }
 
-// Récupération des informations sur les mines
+// RÃ©cupÃ©ration des informations sur les mines
 $planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100, "fields" => 163);
 $quet = $db->sql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage, fields FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
 $user_building = array_fill($start, $nb_planet, $planet);
@@ -89,26 +89,26 @@ while ($row = $db->sql_fetch_assoc($quet)) {
 	$user_percentage[$row["planet_id"]] = $arr;
 }
 
-// Récupération des informations sur l'énergie et les officiers
+// RÃ©cupÃ©ration des informations sur l'Ã©nergie et les officiers
 $user_empire = user_get_empire();
 $user_building = $user_empire["building"];
 $bati = array('','M','C','D','SoP','FR','SS');
 
-// Récupération des informations sur les technologies
+// RÃ©cupÃ©ration des informations sur les technologies
 if ($user_empire["technology"]) $user_technology = $user_empire["technology"];
 else $user_technology = '0';
 
-// Récupération des informations sur les officiers
+// RÃ©cupÃ©ration des informations sur les officiers
 $query = $db->sql_fetch_assoc($db->sql_query("SELECT `off_ingenieur`, `off_geologue` FROM ".TABLE_USER." WHERE `user_id` = ".$user_data["user_id"]));
 $ingenieur = $query["off_ingenieur"];
 $geologue = $query["off_geologue"];
-//Récupération des informatitions sur la techno plasma
+//RÃ©cupÃ©ration des informatitions sur la techno plasma
 $techno_plasma = $user_technology['Plasma'];
 
-// Réparation des informations sur la vitesse univers
+// RÃ©paration des informations sur la vitesse univers
 //$query = mysql_fetch_assoc(mysql_query("SELECT `config_value` FROM ".TABLE_CONFIG." WHERE config_name = 'speed_uni'"));
-// pour les version d'OGSpy jusqu'à 3.04b, par défaut : 1
-// pour l'uni 50 français qui est à vitesse *2, il faut donc mettre... 2 !
+// pour les version d'OGSpy jusqu'Ã  3.04b, par dÃ©faut : 1
+// pour l'uni 50 franÃ§ais qui est Ã  vitesse *2, il faut donc mettre... 2 !
 //if (!$query["config_value"]) $query["config_value"] = 1;
 // modif pour 3.0.7 on economise une requete pour piocher dans global
 $vitesse = $server_config['speed_uni']
