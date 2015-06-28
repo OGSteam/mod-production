@@ -9,12 +9,11 @@
 *	modified	: 10:34 05/09/2009 
 ***************************************************************************/
 
+if (!defined('IN_SPYOGAME')) die("Hacking attempt");
 error_reporting(E_ALL);
 
-
-if (!defined('IN_SPYOGAME')) die("Hacking attempt");
-
 require_once("views/page_header.php");
+
 $start = 101;
 $nb_planet = $start + find_nb_planete_user() - 1;
 $filename = "mod/production/version.txt";
@@ -25,77 +24,91 @@ $creator_name = "<a href=mailto:jojolam44@hotmail.com>Jojo.lam44</a> &copy; 2006
 $modifier_name1 = "<a href=mailto:kalnightmare@free.fr>Kal Nightmare</a> &copy;2006";
 $modifier_name2 = "<a href=mailto:gon.freecks@gmail.com>Scaler</a> &copy; 2007";
 $modifier_name3 = "<a>Shad</a> &copy; 2011";
-$updator_name = "<a>Pitch314</a> &copy; 2013";
+$updator_name = "<a>Pitch314</a> &copy; 2015";
 
 // Récupération des chaines de langue
 require_once("mod/production/lang/lang_fr.php");
 //if (file_exists("mod/production/lang/lang_".$server_config['language'].".php")) require_once("mod/production/lang/lang_".$server_config['language'].".php");
 //if (file_exists("mod/production/lang/lang_".$user_data['user_language'].".php")) require("mod/production/lang/lang_".$user_data['user_language'].".php");
 
-// Enregistrement des données
+/*** Enregistrement des données  ***/
+//Planètes
 for ($i=$start;$i<=$nb_planet;$i++) {
 	if (isset($_POST['planete'.$i])) {
 		if ($_POST['planete'.$i] == 1) {
 			if (isset($_POST['SS'.$i]) && isset($_POST['M'.$i]) && isset($_POST['C'.$i]) && isset($_POST['D'.$i]) && isset($_POST['SoP'.$i]) && isset($_POST['FR'.$i])) {
 				if (is_numeric($_POST['SS'.$i]) && is_numeric($_POST['M'.$i]) && is_numeric($_POST['C'.$i]) && is_numeric($_POST['D'.$i]) && is_numeric($_POST['SoP'.$i]) && is_numeric($_POST['FR'.$i])) {
-					$request = "update ".TABLE_USER_BUILDING." set Sat = ".$_POST['SS'.$i];
+					$request = "UPDATE ".TABLE_USER_BUILDING." SET Sat = ".$_POST['SS'.$i];
 					$request .= ", M = ".$_POST['M'.$i].", C = ".$_POST['C'.$i].", D = ".$_POST['D'.$i];
 					$request .= ", CES = ".$_POST['SoP'.$i].", CEF = ".$_POST['FR'.$i];
-					$request .= " where user_id = ".$user_data["user_id"]." and planet_id = ".$i;
+					$request .= " WHERE user_id = ".$user_data["user_id"]." AND planet_id = ".$i;
 					$db->sql_query($request);
 				}
 			}
 			if (isset($_POST['rap_SS'.$i]) && isset($_POST['rap_M'.$i]) && isset($_POST['rap_C'.$i]) && isset($_POST['rap_D'.$i]) && isset($_POST['rap_SoP'.$i]) && isset($_POST['rap_FR'.$i])) {
 				if (is_numeric($_POST['rap_SS'.$i]) && is_numeric($_POST['rap_M'.$i]) && is_numeric($_POST['rap_C'.$i]) && is_numeric($_POST['rap_D'.$i]) && is_numeric($_POST['rap_SoP'.$i]) && is_numeric($_POST['rap_FR'.$i])) {
-					$request = "update ".TABLE_USER_BUILDING." set Sat_percentage = ".$_POST['rap_SS'.$i];
+					$request = "UPDATE ".TABLE_USER_BUILDING." SET Sat_percentage = ".$_POST['rap_SS'.$i];
 					$request .= ", M_percentage = ".$_POST['rap_M'.$i].", C_percentage = ".$_POST['rap_C'.$i].", D_percentage = ".$_POST['rap_D'.$i];
 					$request .= ", CES_percentage = ".$_POST['rap_SoP'.$i].", CEF_percentage = ".$_POST['rap_FR'.$i];
-					$request .= " where user_id = ".$user_data["user_id"]." and planet_id = ".$i;
+					$request .= " WHERE user_id = ".$user_data["user_id"]." AND planet_id = ".$i;
 					$db->sql_query($request);
 				}
 			}
 		}
 	}
 }
-
-// Récupération des informations sur l'énergie et les officiers
-if (isset($_POST['techno_energie'])) {
-	if (is_numeric($_POST['techno_energie'])) {
-		$request = "update ".TABLE_USER_TECHNOLOGY." set NRJ = ".$_POST['techno_energie']." where user_id = ".$user_data["user_id"];
-		$db->sql_query($request);
-	}
-    if (isset($_POST['techno_plasma'])) {
-        if (is_numeric($_POST['techno_plasma'])) {
-            $request = "update ".TABLE_USER_TECHNOLOGY." set Plasma = ".$_POST['techno_plasma']." where user_id = ".$user_data["user_id"];
-            $db->sql_query($request);
-        }
+// Technologie
+if(isset($_POST['techno_energie']) && isset($_POST['techno_plasma'])) {
+    if(is_numeric($_POST['techno_energie']) && is_numeric($_POST['techno_plasma'])) {
+        $request  = "UPDATE ".TABLE_USER_TECHNOLOGY." SET NRJ = ".$_POST['techno_energie'];
+        $request .= ", Plasma = ".$_POST['techno_plasma'];
+        $request .= " WHERE user_id = ".$user_data["user_id"];
+        $db->sql_query($request);
     }
-	$ingenieur = $geologue = '0';
-	if (isset($_POST['ingenieur']) && $_POST['ingenieur'] == 'on') $ingenieur = '1';
-	if (isset($_POST['geologue']) && $_POST['geologue'] == 'on') $geologue = '1';
-	$request = "update ".TABLE_USER." set off_ingenieur = '".$ingenieur."'";
-	$request .= ", off_geologue = '".$geologue."'";
-	$request .= " where user_id = ".$user_data["user_id"];
-	$db->sql_query($request);
+}
+//officier
+if(isset($_POST['full_off']) && $_POST['full_off'] == 'on') {
+    $request = "UPDATE ".TABLE_USER." SET off_ingenieur = '1', off_technocrate = '1'";
+    $request .= ", off_geologue = '1', off_commandant = '1', off_amiral = '1'";
+    $request .= " WHERE user_id = ".$user_data["user_id"];
+    $db->sql_query($request);
+    //Mise à jour $user_data car non passage par index.php pour renouveler le tampon
+    $user_data['off_commandant'] = $user_data['off_amiral']   = 1;
+    $user_data['off_ingenieur']  = $user_data['off_geologue'] = 1;
+    $user_data['off_technocrate'] = 1;
+} else {
+    $ingenieur = $geologue = '0';
+    if(isset($_POST['ingenieur']) && $_POST['ingenieur'] == 'on') $ingenieur = '1';
+    if(isset($_POST['geologue'])  && $_POST['geologue']  == 'on') $geologue  = '1';
+    if(isset($_POST['ingenieur']) || isset($_POST['geologue'])) {
+        $request = "UPDATE ".TABLE_USER." SET off_ingenieur = '".$ingenieur."'";
+        $request .= ", off_geologue = '".$geologue."'";
+        $request .= " WHERE user_id = ".$user_data["user_id"];
+        $db->sql_query($request);
+    }
 }
 
-// Récupération des informations sur les mines
-$planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100, "fields" => 163);
-$quet = $db->sql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage, fields FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
+//////////////////Manque gestion booster
+/*** Fin enregistrement des données  ***/
+
+
+/*** Récupération des données  ***/
+// Pourcentages
+// $planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100, "fields" => 163);
+$planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100);
+$quet = $db->sql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
 $user_building = array_fill($start, $nb_planet, $planet);
 while ($row = $db->sql_fetch_assoc($quet)) {
 	$arr = $row;
 	unset($arr["planet_id"]);
 	$user_percentage[$row["planet_id"]] = $arr;
 }
-
 // Récupération des informations sur l'énergie et les officiers
 $user_empire = user_get_empire();
 $user_building = $user_empire["building"];
 $bati = array('','M','C','D','SoP','FR','SS');
-
 // Récupération des informations sur les technologies
-if ($user_empire["technology"]) $user_technology = $user_empire["technology"];
+if($user_empire["technology"]) $user_technology = $user_empire["technology"];
 else $user_technology = '0';
 
 // Récupération des informations sur les officiers
@@ -104,6 +117,12 @@ $ingenieur = $query["off_ingenieur"];
 $geologue = $query["off_geologue"];
 //Récupération des informatitions sur la techno plasma
 $techno_plasma = $user_technology['Plasma'];
+
+// ajout infos pour gestion js ...
+$officier = $user_data['off_commandant'] + $user_data['off_amiral'] + $user_data['off_ingenieur']
+          + $user_data['off_geologue'] + $user_data['off_technocrate'];
+$off_full = ($officier == 5) ? '1' : '0';
+echo "<input type='hidden' id='vitesse_uni' size='2' maxlength='5' value='".$server_config['speed_uni']."'/>";
 
 // Réparation des informations sur la vitesse univers
 //$query = mysql_fetch_assoc(mysql_query("SELECT `config_value` FROM ".TABLE_CONFIG." WHERE config_name = 'speed_uni'"));
@@ -114,7 +133,7 @@ $techno_plasma = $user_technology['Plasma'];
 $vitesse = $server_config['speed_uni']
 ?>
 <script src="http://www.ogsteam.besaba.com/js/stat.js" type="text/javascript"> </script>
-<SCRIPT LANGUAGE=Javascript SRC="js/ogame_formula.js"></SCRIPT>
+<script src="js/ogame_formula.js" type="text/javascript"></script>
 <script type="text/javascript">
 var nb_planet = <?php echo $nb_planet;?>;
 var start = <?php echo $start;?>;
@@ -167,9 +186,8 @@ echo "document.getElementById('geologue').checked = ";
 if ($geologue == 1) echo "true;\n";
 else echo "false;\n";
 echo "document.getElementById('full_off').checked = ";
-echo "false;\n";
-// if ($full_off == 1) echo "true;\n";
-// else echo "false;\n";
+if ($off_full == 1) echo "true;\n";
+else echo "false;\n";
 ?>
 verif_donnee ();
 }
@@ -439,7 +457,7 @@ echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
 	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,-1)'>-</a><input type='text' id='techno_plasma' name='techno_plasma' size='2' maxlength='6' onBlur='javascript:verif_donnee (0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,1)'>+</a></th>
     <th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_E'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_E_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='ingenieur' name='ingenieur' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_E'];?></a></label></th>
 	<th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_G'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_G_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='geologue' name='geologue' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_G'];?></a></label></th>
-    <th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_full'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_full_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='full_off' name='fulloff' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_full'];?></a></label></th>
+    <th colspan="2" onmouseover="Tip('<table width=&quot;200&quot;><tr><td align=&quot;center&quot; class=&quot;c&quot;><?php echo $lang['prod_officer_full'];?></td></tr><tr><th align=&quot;center&quot;><a><?php echo $lang['prod_officer_full_help'];?></a></th></tr></table>')" onmouseout="UnTip()"><label><input type='checkbox' id='full_off' name='full_off' onClick='javascript:verif_donnee (0)'> <a><?php echo $lang['prod_officer_full'];?></a></label></th>
 </tr>
 </form>
 <tr>
