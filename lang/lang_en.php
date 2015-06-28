@@ -35,7 +35,7 @@ $lang['prod_building_SoP'] = "Solar plant";
 $lang['prod_building_FR'] = "Fusion reactor";
 
 // Solar Satellite
-$lang['prod_SS'] = "Solar Satellite";
+$lang['prod_SS'] = "Solar satellite";
 
 // Technologies and Officers
 $lang['prod_tech_off'] = "Technologies and Officers";
