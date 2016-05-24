@@ -100,7 +100,7 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
 /*** Récupération des données  ***/
 $bati = array('','M','C','D','SoP','FR','SS');
 
-$user_empire = user_get_empire();
+$user_empire = user_get_empire($user_data["user_id"]);
 $user_building = $user_empire["building"];
 if($user_empire["technology"]) $user_technology = $user_empire["technology"];
 else $user_technology = '0';
