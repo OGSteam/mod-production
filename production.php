@@ -10,12 +10,11 @@
 ***************************************************************************/
 
 if (!defined('IN_SPYOGAME')) die("Hacking attempt");
-error_reporting(E_ALL);
 
 require_once("views/page_header.php");
 
 $start = 101;
-$nb_planete_reel = find_nb_planete_user();
+$nb_planete_reel = find_nb_planete_user($user_data["user_id"]);
 $nb_planet = $start + $nb_planete_reel - 1;
 $filename = "mod/production/version.txt";
 if (file_exists($filename)) $file = file($filename);

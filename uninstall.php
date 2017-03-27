@@ -1,7 +1,7 @@
 <?php
 /***************************************************************************
 *	Filename	: uninstall.php
-*	desc.		: Page de désintallation du module "Production"
+*	desc.		: Page de dï¿½sintallation du module "Production"
 *	Authors	: Shad
 *	created	: 25/05/2011
 *	modified	: 25/05/2011
