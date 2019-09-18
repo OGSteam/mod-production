@@ -59,15 +59,18 @@ IV/ Versions
 1.5.0
 1.5.1 [2013-02-10]= Prise en compte des officiers et technologie plasma (+reprise du mod par Pitch314)
 1.5.2 [2013-03-26]= Amélioration affichage
-
+1.5.3 [2015-06-29]= Amélioration, refacctoring js + use OGSpy js
+1.5.4 [2017-04-15]= La fonction requiert un user_id
+1.5.5 [2018-10-23]= Version OGSpy Minimale
+1.5.6 [2019-xx-xx]= Nouveau fichier de gestion
 
 V/ Informations et liens
-Les bugs seront renseignés sur bitbucket (https://bitbucket.org/pitch314/mod-production/issues/new) ou sur le forum avec comme objet :
+Les bugs seront renseignés sur github (https://github.com/OGSteam/mod-production/issues/new) ou sur le forum avec comme objet :
 " [Mod] Production, bug/erreur/problème ...] " (choisir le bon mot)
 
-Bitbucket : https://bitbucket.org/pitch314/mod-production
-Signalement de bugs : https://bitbucket.org/pitch314/mod-production/issues/new
-Téléchargement : https://bitbucket.org/pitch314/mod-production/downloads#tag-downloads
+Bitbucket : https://github.com/OGSteam/mod-production
+Signalement de bugs : https://github.com/OGSteam/mod-production/issues/new
+Téléchargement : https://github.com/OGSteam/mod-production/archive/master.zip
 Wiki OGSteam : http://wiki.ogsteam.fr/doku.php?id=ogspy:liste_mods#production
 
 Responsable du mod : Pitch314

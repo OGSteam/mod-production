@@ -124,7 +124,6 @@ echo "<input type='hidden' id='off_full' value='".$off_full."'/>";
 
 $vitesse = $server_config['speed_uni'];
 ?>
-<script src="http://www.ogsteam.besaba.com/js/stat.js" type="text/javascript"> </script>
 <script type="text/javascript" src="js/ogame_formula.js"></script>
 <!-- DEBUT DU SCRIPT -->
 <script type="text/javascript">
@@ -201,7 +200,7 @@ function add(bat, plan, inc) {
 function selection(sel) {
 	if (sel == 0) sel = false;
 	else sel = true;
-	for (i=1 ; i<=nb_planet ; i++) document.getElementById('global' + i).checked = sel; 
+	for (i=1 ; i<=nb_planet-start+1 ; i++) document.getElementById('global' + i).checked = sel; 
 	verif_donnee ();
 }
 
@@ -317,7 +316,7 @@ for(i=start ; i<=nb_planet ; i++) {
         if(ratio_conso > 0){
             M_1_prod[i] = Math.round(ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100);
             C_1_prod[i] = Math.round(ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100);
-            D_1_prod[i] = Math.round(ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100);
+            D_1_prod[i] = Math.round(ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100);
         } else {
             M_1_prod[i] = Math.round(production("M", 0, 0, 0));
             C_1_prod[i] = Math.round(production("C", 0, 0, 0));
@@ -336,9 +335,11 @@ for(i=start ; i<=nb_planet ; i++) {
         
         var j = i-100;
         if (global[j] == 1) {
-            M_prod = M_prod + M_1_prod[i];
-            C_prod = C_prod + C_1_prod[i];
-            D_prod = D_prod + D_1_prod[i];
+		if (document.getElementById('global' + j).checked) {
+            	M_prod = M_prod + M_1_prod[i];
+            	C_prod = C_prod + C_1_prod[i];
+            	D_prod = D_prod + D_1_prod[i];
+		}
         }
 		cases[i] = cases_base[j] + donnee['M'][i] + donnee['C'][i] + donnee['D'][i] + donnee['SoP'][i] + donnee['FR'][i];
     }

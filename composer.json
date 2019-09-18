@@ -1,0 +1,38 @@
+{
+    "name" : "ogsteam/mod-production",
+    "description" : "OGSpy Module calculating the mineral production",
+    "version": "1.5.6",
+    "type" : "ogspy-mod",
+    "keywords" : [ "ogspy" ],
+    "license" : "GPL-2.0-only",
+    "authors" : [
+        {
+            "name" : "Jojo.lam44",
+            "email" : "jojolam44@hotmail.com",
+            "homepage": "https://github.com/darknoon29",
+            "role" : "Lead Developer"
+        }
+    ],
+    "require" : {
+        "php" : ">=7.0.0",
+        "ogsteam/ogspy" : ">=3.3.6"
+    },
+    "extra" : {
+            "install_script": "install.php",
+            "update_script": "update.php",
+            "uninstall_script": "uninstall.php",
+            "mod_title": "production",
+            "menu_title" : "Production",
+            "action_name" : "production",
+            "folder_name" : "production",
+            "action_file" : "production.php",
+            "active" : true,
+            "admin" : false
+    },
+    "homepage" : "https://github.com/ogsteam/mod-production",
+    "support": {
+        "issues": "https://github.com/ogsteam/mod-production/issues",
+        "source": "https://github.com/ogsteam/mod-production/tree/master",
+         "chat" : "https://discord.gg/Azcb67b"
+    }
+}
