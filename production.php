@@ -300,7 +300,7 @@ for(i=start ; i<=nb_planet ; i++) {
         
         var CES_1_production = production("CES", donnee['SoP'][i], temperature_max_1, NRJ) * donnee['rap_SoP'][i] / 100;
         var CEF_1_production = production("CEF", donnee['FR'][i], temperature_max_1, NRJ) * donnee['rap_FR'][i] / 100;
-        var Sat_1_production = production_sat(temperature_max_1) * donnee['SS'][i] * donnee['rap_SS'][i] / 100;
+        var Sat_1_production = production_sat(temperature_max_1, donnee['SS'][i]) * donnee['rap_SS'][i] / 100;
         if(isNaN(Sat_1_production)) Sat_1_production = production_sat(temperature_max_1, temperature_max_1-40) * donnee['SS'][i] * donnee['rap_SS'][i] / 100;
         var NRJ_1 = Math.round(CES_1_production + CEF_1_production + Sat_1_production);
         
