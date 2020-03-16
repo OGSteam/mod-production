@@ -1,7 +1,7 @@
 {
     "name" : "ogsteam/mod-production",
     "description" : "OGSpy Module calculating the mineral production",
-    "version": "1.5.6",
+    "version": "1.5.7",
     "type" : "ogspy-mod",
     "keywords" : [ "ogspy" ],
     "license" : "GPL-2.0-only",
@@ -15,7 +15,7 @@
     ],
     "require" : {
         "php" : ">=7.0.0",
-        "ogsteam/ogspy" : ">=3.3.6"
+        "ogsteam/ogspy" : ">=3.3.7"
     },
     "extra" : {
             "install_script": "install.php",
