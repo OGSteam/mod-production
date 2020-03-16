@@ -31,6 +31,10 @@ require_once("mod/production/lang/lang_fr.php");
 //if (file_exists("mod/production/lang/lang_".$server_config['language'].".php")) require_once("mod/production/lang/lang_".$server_config['language'].".php");
 //if (file_exists("mod/production/lang/lang_".$user_data['user_language'].".php")) require("mod/production/lang/lang_".$user_data['user_language'].".php");
 
+// Détection de la class
+$class_collect = ($user_data['user_class'] == 'COL') ? '1' : '0';
+echo "<input type='hidden' id='class_collect' value='" . $class_collect . "'/>";
+
 /*** Enregistrement des données  ***/
 if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
     //Planètes
