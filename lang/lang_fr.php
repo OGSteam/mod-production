@@ -37,6 +37,9 @@ $lang['prod_building_FR'] = "Centrale &eacute;lectrique de fusion";
 // Solar Satellite
 $lang['prod_SS'] = "Satellite solaire";
 
+// Foreuse
+$lang['prod_FO'] = "Foreuse";
+
 // Technologies and Officers
 $lang['prod_tech_off'] = "Technologies et Officiers";
 $lang['prod_technology_En'] = "Technologie &Eacute;nergie";
@@ -47,6 +50,9 @@ $lang['prod_officer_G'] = "Officier G&eacute;ologue";
 $lang['prod_officer_G_help'] = "+10% de production";
 $lang['prod_officer_full'] = "Full officiers";
 $lang['prod_officer_full_help'] = "+12% de production et d&rsquo;&eacute;nergie";
+$lang['prod_collect'] = "Collecteur";
+$lang['prod_collect_help'] = "+25% de production et 10% d&rsquo;&eacute;nergie";
+
 
 // Production
 $lang['prod_prod_hour'] = "Production par heure";

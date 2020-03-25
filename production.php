@@ -33,7 +33,7 @@ require_once("mod/production/lang/lang_fr.php");
 
 // Détection de la class
 $class_collect = ($user_data['user_class'] == 'COL') ? '1' : '0';
-echo "<input type='hidden' id='class_collect' value='" . $class_collect . "'/>";
+//echo "<input type='hidden' id='class_collect' value='" . $class_collect . "'/>";
 
 /*** Enregistrement des données  ***/
 if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
@@ -41,20 +41,20 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
     for ($i=$start;$i<=$nb_planet;$i++) {
         if (isset($_POST['planete'.$i])) {
             if ($_POST['planete'.$i] == 1) {
-                if (isset($_POST['SS'.$i]) && isset($_POST['M'.$i]) && isset($_POST['C'.$i]) && isset($_POST['D'.$i]) && isset($_POST['SoP'.$i]) && isset($_POST['FR'.$i])) {
-                    if (is_numeric($_POST['SS'.$i]) && is_numeric($_POST['M'.$i]) && is_numeric($_POST['C'.$i]) && is_numeric($_POST['D'.$i]) && is_numeric($_POST['SoP'.$i]) && is_numeric($_POST['FR'.$i])) {
+                if (isset($_POST['SS'.$i]) && isset($_POST['M'.$i]) && isset($_POST['C'.$i]) && isset($_POST['D'.$i]) && isset($_POST['SoP'.$i]) && isset($_POST['FR'.$i]) && isset($_POST['FO'.$i])) {
+                    if (is_numeric($_POST['SS'.$i]) && is_numeric($_POST['M'.$i]) && is_numeric($_POST['C'.$i]) && is_numeric($_POST['D'.$i]) && is_numeric($_POST['SoP'.$i]) && is_numeric($_POST['FR'.$i]) && is_numeric($_POST['FO'.$i])) {
                         $request = "UPDATE ".TABLE_USER_BUILDING." SET Sat = ".$_POST['SS'.$i];
                         $request .= ", M = ".$_POST['M'.$i].", C = ".$_POST['C'.$i].", D = ".$_POST['D'.$i];
-                        $request .= ", CES = ".$_POST['SoP'.$i].", CEF = ".$_POST['FR'.$i];
+                        $request .= ", CES = ".$_POST['SoP'.$i].", CEF = ".$_POST['FR'.$i].", ".'FOR'." = ".$_POST['FO'.$i];
                         $request .= " WHERE user_id = ".$user_data["user_id"]." AND planet_id = ".$i;
                         $db->sql_query($request);
                     }
                 }
-                if (isset($_POST['rap_SS'.$i]) && isset($_POST['rap_M'.$i]) && isset($_POST['rap_C'.$i]) && isset($_POST['rap_D'.$i]) && isset($_POST['rap_SoP'.$i]) && isset($_POST['rap_FR'.$i])) {
-                    if (is_numeric($_POST['rap_SS'.$i]) && is_numeric($_POST['rap_M'.$i]) && is_numeric($_POST['rap_C'.$i]) && is_numeric($_POST['rap_D'.$i]) && is_numeric($_POST['rap_SoP'.$i]) && is_numeric($_POST['rap_FR'.$i])) {
+                if (isset($_POST['rap_SS'.$i]) && isset($_POST['rap_M'.$i]) && isset($_POST['rap_C'.$i]) && isset($_POST['rap_D'.$i]) && isset($_POST['rap_SoP'.$i]) && isset($_POST['rap_FR'.$i]) && isset($_POST['rap_FO'.$i])) {
+                    if (is_numeric($_POST['rap_SS'.$i]) && is_numeric($_POST['rap_M'.$i]) && is_numeric($_POST['rap_C'.$i]) && is_numeric($_POST['rap_D'.$i]) && is_numeric($_POST['rap_SoP'.$i]) && is_numeric($_POST['rap_FR'.$i]) && is_numeric($_POST['rap_FO'.$i])) {
                         $request = "UPDATE ".TABLE_USER_BUILDING." SET Sat_percentage = ".$_POST['rap_SS'.$i];
                         $request .= ", M_percentage = ".$_POST['rap_M'.$i].", C_percentage = ".$_POST['rap_C'.$i].", D_percentage = ".$_POST['rap_D'.$i];
-                        $request .= ", CES_percentage = ".$_POST['rap_SoP'.$i].", CEF_percentage = ".$_POST['rap_FR'.$i];
+                        $request .= ", CES_percentage = ".$_POST['rap_SoP'.$i].", CEF_percentage = ".$_POST['rap_FR'.$i].", FOR_percentage = ".$_POST['rap_FO'.$i];
                         $request .= " WHERE user_id = ".$user_data["user_id"]." AND planet_id = ".$i;
                         $db->sql_query($request);
                     }
@@ -79,6 +79,7 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
         $user_data['off_commandant'] = $user_data['off_amiral']   = 1;
         $user_data['off_ingenieur']  = $user_data['off_geologue'] = 1;
         $user_data['off_technocrate'] = 1;
+    	$db->sql_query($request);
     } else {
         $ingenieur = $geologue = 0;
         $user_data['off_ingenieur'] = $user_data['off_geologue'] = 0;
@@ -93,15 +94,31 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
         $request = "UPDATE ".TABLE_USER." SET off_geologue='".$geologue."',";
         $request .= " off_ingenieur='".$ingenieur."'";
         $request .= " WHERE user_id = ".$user_data["user_id"];
-    }
-    $db->sql_query($request);
+        $db->sql_query($request);
+	}
+    // Classe collecteur
+    if (isset($_POST['class_collect']) && $_POST['class_collect'] == 'on '){
+	$class_collect = 1;
+	$user_data["user_class"] = "COL";
+	$request = "UPDATE ".TABLE_USER." SET user_class='COL'";
+	$request .= " WHERE user_id = ".$user_data["user_id"];
+	$db->sql_query($request);
+	}
+	
+    if (isset($_POST['class_collect']) && $_POST['class_collect'] == 'off '){
+	$class_collect = 0;
+	$user_data["user_class"] = "none";
+	$request = "UPDATE ".TABLE_USER." SET user_class='none'";
+	$request .= " WHERE user_id = ".$user_data["user_id"];
+	$db->sql_query($request);
+	}
 
 //////////////////Manque gestion booster
 }
 /*** Fin enregistrement des données  ***/
 
 /*** Récupération des données  ***/
-$bati = array('','M','C','D','SoP','FR','SS');
+$bati = array('','M','C','D','SoP','FR','SS','FO');
 
 $user_empire = user_get_empire($user_data["user_id"]);
 $user_building = $user_empire["building"];
@@ -109,8 +126,8 @@ if($user_empire["technology"]) $user_technology = $user_empire["technology"];
 else $user_technology = '0';
 
 // Pourcentages
-$planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100);
-$quet = $db->sql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
+$planet = array("planet_id" => "", "M_percentage" => 0, "C_percentage" => 0, "D_percentage" => 0, "CES_percentage" => 100, "CEF_percentage" => 100, "Sat_percentage" => 100, "FOR_percentage" => 100);
+$quet = $db->sql_query("SELECT planet_id, M_percentage, C_percentage, D_percentage, CES_percentage, CEF_percentage, Sat_percentage, FOR_percentage FROM ".TABLE_USER_BUILDING." WHERE user_id = ".$user_data["user_id"]." AND planet_id < 199 ORDER BY planet_id");
 $user_percentage = array_fill($start, $nb_planet, $planet);
 while ($row = $db->sql_fetch_assoc($quet)) {
 	$arr = $row;
@@ -125,6 +142,7 @@ echo "<input type='hidden' id='vitesse_uni' size='2' maxlength='5' value='".$ser
 echo "<input type='hidden' id='off_ingenieur' value='".$user_data["off_ingenieur"]."'/>";
 echo "<input type='hidden' id='off_geologue' value='".$user_data["off_geologue"]."'/>";
 echo "<input type='hidden' id='off_full' value='".$off_full."'/>";
+echo "<input type='hidden' id='class_collect' value='".$class_collect."'/>";
 
 $vitesse = $server_config['speed_uni'];
 ?>
@@ -147,26 +165,28 @@ for ($i=$start;$i<=$nb_planet;$i++) {
 			$user_building[$i]['CES']."','".
 			$user_building[$i]['CEF']."','".
 			$user_building[$i]['Sat']."','".
+			$user_building[$i]['FOR']."','".
 			$user_building[$i]['temperature_max']."','".
 			$user_percentage[$i]['M_percentage']."','".
 			$user_percentage[$i]['C_percentage']."','".
 			$user_percentage[$i]['D_percentage']."','".
 			$user_percentage[$i]['CES_percentage']."','".
 			$user_percentage[$i]['CEF_percentage']."','".
-			$user_percentage[$i]['Sat_percentage']."',1);\n";
+			$user_percentage[$i]['Sat_percentage']."','".
+			$user_percentage[$i]['FOR_percentage']."',1);\n";
 	} else {
 		$Planete[$i] = 0;
-		echo "batimentsOGSpy[".$i."] = new Array('','','','','','','','','','','','','','',0);\n";
+		echo "batimentsOGSpy[".$i."] = new Array('','','','','','','','','','','','','','','','',0);\n";
 	}
 }
 echo "vitesse = ".$vitesse.";\n";
 ?>
-bati = new Array('','M','C','D','SoP','FR','SS');
+bati = new Array('','M','C','D','SoP','FR','SS','FO');
 
 function chargement() {
-	temp = new Array('',8,9,10,11,12,13);
+	temp = new Array('',9,10,11,12,13,14,15);
 	for(i=start ; i<=nb_planet ; i++) {
-		for(b=1 ; b<=6 ; b++) {
+		for(b=1 ; b<=7 ; b++) {
 			document.getElementById(bati[b]+i).value = batimentsOGSpy[i][b];
 			document.getElementById('rap_' + bati[b] + i).value = batimentsOGSpy[i][temp[b]];
 		}
@@ -184,15 +204,18 @@ function chargement() {
 	echo "\tdocument.getElementById('c_off_full').checked = ";
 	if($off_full == 1) echo "true;\n";
 	else echo "false;\n";
+	echo "\tdocument.getElementById('class_collect').checked = ";
+	if($user_data['user_class'] == "COL") echo "true;\n";
+	else echo "false;\n";
 ?>
 	verif_donnee ();
 }
 
 function add(bat, plan, inc) {
-	if (bat == 7) {
+	if (bat == 8) {
 		document.getElementById('techno_energie').value = parseFloat(document.getElementById('techno_energie').value) + inc;
 	} else {
-		if (bat == 8) {
+		if (bat == 9) {
 			document.getElementById('techno_plasma').value = parseFloat(document.getElementById('techno_plasma').value) + inc;
 		} else {
 			document.getElementById(bati[bat] + plan).value = parseFloat(document.getElementById(bati[bat] + plan).value) + inc;
@@ -217,7 +240,7 @@ function verif_donnee(envoye) {
 	}	
     for(i=start ; i<=nb_planet ; i++) {
 		j = i - 100;
-		for(b=1 ; b<=6 ; b++) {
+		for(b=1 ; b<=7 ; b++) {
 			if((isNaN(parseFloat(document.getElementById(bati[b] + i).value))) || parseFloat(document.getElementById(bati[b] + i).value) < 0 ) document.getElementById(bati[b] + i).value = batimentsOGSpy[i][b];
 		}
     }
@@ -242,6 +265,12 @@ function verif_donnee(envoye) {
             document.getElementById('off_geologue').value = 1;
         }
     }
+	document.getElementById('class_collect').value = 0;
+	if (document.getElementById('class_collect').checked) {
+		document.getElementById('class_collect').value = 1;
+	} else {
+		document.getElementById('class_collect').value = 0;
+	}
     
 	if(envoye == 1) {
 		document.getElementById('s_save').value = 1;
@@ -253,7 +282,7 @@ function verif_donnee(envoye) {
 function recup_donnee () {
 	donnee = new Array;
 	
-	for(b=1 ; b<=6 ; b++) {
+	for(b=1 ; b<=7 ; b++) {
 		donnee[bati[b]] = new Array;
 		donnee['rap_' + bati[b]] = new Array;
 		for(i=start ; i<=nb_planet ; i++) {
@@ -266,6 +295,8 @@ function recup_donnee () {
 	calcul();
 }
 
+
+
 function calcul () {
 ratio = new Array();
 cases = new Array();
@@ -276,6 +307,10 @@ for ($i=$start ; $i<=$nb_planet ; $i++)
 ?>);
 var NRJ = technologieNRJ;
 var Plasma = technologiePlasma;
+
+var speed = <?php
+echo $vitesse
+?>;
 
 energie = new Array();
 energie_tot = new Array();
@@ -290,17 +325,29 @@ deut_heure[nb_planet+1] = 0;
 var M_1_prod = new Array();
 var C_1_prod = new Array();
 var D_1_prod = new Array();
+var F_1_prod = new Array();
 var M_prod = 0;
 var C_prod = 0;
 var D_prod = 0;
+var F_prod_M = 0;
+var F_prod_C = 0;
+var F_prod_D = 0;
 for(i=start ; i<=nb_planet ; i++) {
-    if (batimentsOGSpy[i][14] == 1) {
-        temperature_max_1 = batimentsOGSpy[i][7];
+    if (batimentsOGSpy[i][16] == 1) {
+        temperature_max_1 = batimentsOGSpy[i][8];
         
         var M_1_conso = Math.round(consumption("M", donnee['M'][i]) * donnee['rap_M'][i] / 100);
         var C_1_conso = Math.round(consumption("C", donnee['C'][i]) * donnee['rap_C'][i] / 100);
         var D_1_conso = Math.round(consumption("D", donnee['D'][i]) * donnee['rap_D'][i] / 100);
-        var energie_conso = M_1_conso + C_1_conso + D_1_conso;
+	
+	var nb_F_1 = 0;	
+	if ( donnee['FO'][i] > (donnee['M'][i] + donnee['C'][i] + donnee['D'][i]) * 8) {
+		nb_F_1 = (donnee['M'][i] + donnee['C'][i] + donnee['D'][i]) * 8;
+	} else {
+		nb_F_1 = donnee['FO'][i];	
+	}
+	var F_1_conso = Math.round(consumption("FOR", nb_F_1) * donnee['rap_FO'][i] / 100);
+        var energie_conso = M_1_conso + C_1_conso + D_1_conso + F_1_conso;
         
         var CES_1_production = production("CES", donnee['SoP'][i], temperature_max_1, NRJ) * donnee['rap_SoP'][i] / 100;
         var CEF_1_production = production("CEF", donnee['FR'][i], temperature_max_1, NRJ) * donnee['rap_FR'][i] / 100;
@@ -318,9 +365,23 @@ for(i=start ; i<=nb_planet ; i++) {
             if(ratio_conso > 1) ratio_conso = 1;
         }
         if(ratio_conso > 0){
-            M_1_prod[i] = Math.round(ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100);
-            C_1_prod[i] = Math.round(ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100);
-            D_1_prod[i] = Math.round(ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100);
+	if (class_collect.value == "1") {
+	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	} else {
+
+
+	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	}
+
+
+
+            M_1_prod[i] = Math.round(ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100) + F_prod_M;
+            C_1_prod[i] = Math.round(ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100) + F_prod_C;
+            D_1_prod[i] = Math.round(ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100) + F_prod_D;
         } else {
             M_1_prod[i] = Math.round(production("M", 0, 0, 0));
             C_1_prod[i] = Math.round(production("C", 0, 0, 0));
@@ -359,7 +420,7 @@ function ecrire() {
 <?php
 for ($i=$start;$i<=$nb_planet;$i++) {
 	if ($Planete[$i] == 1) {
-		echo "if (batimentsOGSpy['".$i."'][14] == 1) {\n";
+		echo "if (batimentsOGSpy['".$i."'][16] == 1) {\n";
 		echo "\tif (ratio[".$i."] == 1) couleur = 'lime';\n\telse couleur = 'red';\n";
 		echo "\tif (cases[".$i."] <= ".$user_building[$i]["fields"].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
 		echo "\tdocument.getElementById('fact".$i."').innerHTML = '<font color=\'' + couleur + '\'>' + ratio[".$i."] + '</font>';\n";
@@ -500,17 +561,35 @@ echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
 		echo "</select></th>\n";
 	}
 	echo "</tr>";
+
+
+echo "<tr><th><a>".$lang['prod_FO']."</a></th>";
+	for ($i=$start ; $i<=$nb_planet ; $i++) {
+		echo "\t<th><a style='cursor: pointer; vertical-align: middle;' onClick='javascript:add(7,".$i.",-1)'>-</a>";
+        echo "<input type='text' id='".$bati[7].$i."' name='".$bati[7].$i."' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'>";
+        echo "<input type='hidden' name='planete".$i."' value='".$Planete[$i]."'>";
+        echo "<a style='cursor: pointer; vertical-align: middle;' onClick='javascript:add(7,".$i.",1)'>+</a>\n";
+		echo "\t\t<select id='rap_".$bati[7].$i."' name='rap_".$bati[6].$i."' onChange='javascript:add (7,".$i.",1)'>";
+		for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		echo "</select></th>\n";
+	}
+	echo "</tr>";
+
+
+
+
 ?>
 <tr>
 <td class="c" colspan="<?php echo $nb_planet;?>"><?php echo $lang['prod_tech_off'];?></td>
 </tr>
 <tr><th><a><?php echo $lang['prod_technology_En'];?></a></th>
-	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add(7,0,-1)'>-</a><input type='text' id='techno_energie' name='techno_energie' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (7,0,1)'>+</a></th>
+	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add(8,0,-1)'>-</a><input type='text' id='techno_energie' name='techno_energie' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,1)'>+</a></th>
 	<th><a><?php echo $lang['prod_technology_Pl'];?></a></th>
-	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,-1)'>-</a><input type='text' id='techno_plasma' name='techno_plasma' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (8,0,1)'>+</a></th>
+	<th><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (9,0,-1)'>-</a><input type='text' id='techno_plasma' name='techno_plasma' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'><a style='cursor: pointer;vertical-align: middle;' onClick='javascript:add (9,0,1)'>+</a></th>
 	<th colspan="2" title="<?php echo $lang['prod_officer_E_help'];?>"><label><a><?php echo $lang['prod_officer_E'];?></a><input type='checkbox' id='c_off_ingenieur' name='c_off_ingenieur' onClick='javascript:verif_donnee(0)'></label></th>
 	<th colspan="2" title="<?php echo $lang['prod_officer_G_help'];?>"><label><a><?php echo $lang['prod_officer_G'];?></a><input type='checkbox' id='c_off_geologue' name='c_off_geologue' onClick='javascript:verif_donnee(0)'></label></th>
 	<th colspan="2" title="<?php echo $lang['prod_officer_full_help'];?>"><label><a><?php echo $lang['prod_officer_full'];?></a><input type='checkbox' id='c_off_full' name='c_off_full' onClick='javascript:verif_donnee(0)'></label></th>
+	<th colspan="2" title="<?php echo $lang['prod_collect_help'];?>"><label><a><?php echo $lang['prod_collect'];?></a><input type='checkbox' id='class_collect' name='class_collect' onClick='javascript:verif_donnee(0)'></label></th>
 </tr>
 <tr>
 	<td class="c" colspan="<?php echo $nb_planet+1;?>">
