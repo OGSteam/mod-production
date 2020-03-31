@@ -32,7 +32,7 @@ require_once("mod/production/lang/lang_fr.php");
 //if (file_exists("mod/production/lang/lang_".$user_data['user_language'].".php")) require("mod/production/lang/lang_".$user_data['user_language'].".php");
 
 // Détection de la class
-$class_collect = ($user_data['user_class'] == 'COL') ? '1' : '0';
+//$class_collect = ($user_data['user_class'] == 'COL') ? '1' : '0';
 //echo "<input type='hidden' id='class_collect' value='" . $class_collect . "'/>";
 
 /*** Enregistrement des données  ***/
@@ -142,7 +142,7 @@ echo "<input type='hidden' id='vitesse_uni' size='2' maxlength='5' value='".$ser
 echo "<input type='hidden' id='off_ingenieur' value='".$user_data["off_ingenieur"]."'/>";
 echo "<input type='hidden' id='off_geologue' value='".$user_data["off_geologue"]."'/>";
 echo "<input type='hidden' id='off_full' value='".$off_full."'/>";
-echo "<input type='hidden' id='class_collect' value='".$class_collect."'/>";
+echo "<input type='hidden' id='user_class' value='".$class_collect."'/>";
 
 $vitesse = $server_config['speed_uni'];
 ?>
