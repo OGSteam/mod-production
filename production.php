@@ -45,7 +45,7 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
                     if (is_numeric($_POST['SS'.$i]) && is_numeric($_POST['M'.$i]) && is_numeric($_POST['C'.$i]) && is_numeric($_POST['D'.$i]) && is_numeric($_POST['SoP'.$i]) && is_numeric($_POST['FR'.$i]) && is_numeric($_POST['FO'.$i])) {
                         $request = "UPDATE ".TABLE_USER_BUILDING." SET Sat = ".$_POST['SS'.$i];
                         $request .= ", M = ".$_POST['M'.$i].", C = ".$_POST['C'.$i].", D = ".$_POST['D'.$i];
-                        $request .= ", CES = ".$_POST['SoP'.$i].", CEF = ".$_POST['FR'.$i].", ".'FOR'." = ".$_POST['FO'.$i];
+                        $request .= ", CES = ".$_POST['SoP'.$i].", CEF = ".$_POST['FR'.$i].", `FOR` = ".$_POST['FO'.$i];
                         $request .= " WHERE user_id = ".$user_data["user_id"]." AND planet_id = ".$i;
                         $db->sql_query($request);
                     }
@@ -97,7 +97,7 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
         $db->sql_query($request);
 	}
     // Classe collecteur
-    if (isset($_POST['class_collect']) && $_POST['class_collect'] == 'on '){
+    if (isset($_POST['c_class_collect']) && $_POST['c_class_collect'] == 'on '){
 	$class_collect = 1;
 	$user_data["user_class"] = "COL";
 	$request = "UPDATE ".TABLE_USER." SET user_class='COL'";
@@ -105,7 +105,7 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
 	$db->sql_query($request);
 	}
 	
-    if (isset($_POST['class_collect']) && $_POST['class_collect'] == 'off '){
+    if (isset($_POST['c_class_collect']) && $_POST['c_class_collect'] == 'off '){
 	$class_collect = 0;
 	$user_data["user_class"] = "none";
 	$request = "UPDATE ".TABLE_USER." SET user_class='none'";
@@ -142,7 +142,7 @@ echo "<input type='hidden' id='vitesse_uni' size='2' maxlength='5' value='".$ser
 echo "<input type='hidden' id='off_ingenieur' value='".$user_data["off_ingenieur"]."'/>";
 echo "<input type='hidden' id='off_geologue' value='".$user_data["off_geologue"]."'/>";
 echo "<input type='hidden' id='off_full' value='".$off_full."'/>";
-echo "<input type='hidden' id='user_class' value='".$class_collect."'/>";
+echo "<input type='hidden' id='class_collect' value='".$class_collect."'/>";
 
 $vitesse = $server_config['speed_uni'];
 ?>
@@ -204,7 +204,7 @@ function chargement() {
 	echo "\tdocument.getElementById('c_off_full').checked = ";
 	if($off_full == 1) echo "true;\n";
 	else echo "false;\n";
-	echo "\tdocument.getElementById('class_collect').checked = ";
+	echo "\tdocument.getElementById('c_class_collect').checked = ";
 	if($user_data['user_class'] == "COL") echo "true;\n";
 	else echo "false;\n";
 ?>
@@ -266,7 +266,7 @@ function verif_donnee(envoye) {
         }
     }
 	document.getElementById('class_collect').value = 0;
-	if (document.getElementById('class_collect').checked) {
+	if (document.getElementById('c_class_collect').checked) {
 		document.getElementById('class_collect').value = 1;
 	} else {
 		document.getElementById('class_collect').value = 0;
@@ -589,7 +589,7 @@ echo "<tr><th><a>".$lang['prod_FO']."</a></th>";
 	<th colspan="2" title="<?php echo $lang['prod_officer_E_help'];?>"><label><a><?php echo $lang['prod_officer_E'];?></a><input type='checkbox' id='c_off_ingenieur' name='c_off_ingenieur' onClick='javascript:verif_donnee(0)'></label></th>
 	<th colspan="2" title="<?php echo $lang['prod_officer_G_help'];?>"><label><a><?php echo $lang['prod_officer_G'];?></a><input type='checkbox' id='c_off_geologue' name='c_off_geologue' onClick='javascript:verif_donnee(0)'></label></th>
 	<th colspan="2" title="<?php echo $lang['prod_officer_full_help'];?>"><label><a><?php echo $lang['prod_officer_full'];?></a><input type='checkbox' id='c_off_full' name='c_off_full' onClick='javascript:verif_donnee(0)'></label></th>
-	<th colspan="2" title="<?php echo $lang['prod_collect_help'];?>"><label><a><?php echo $lang['prod_collect'];?></a><input type='checkbox' id='class_collect' name='class_collect' onClick='javascript:verif_donnee(0)'></label></th>
+	<th colspan="2" title="<?php echo $lang['prod_collect_help'];?>"><label><a><?php echo $lang['prod_collect'];?></a><input type='checkbox' id='c_class_collect' name='c_class_collect' onClick='javascript:verif_donnee(0)'></label></th>
 </tr>
 <tr>
 	<td class="c" colspan="<?php echo $nb_planet+1;?>">
