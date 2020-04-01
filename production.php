@@ -97,7 +97,7 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
         $db->sql_query($request);
 	}
     // Classe collecteur
-    if (isset($_POST['c_class_collect']) && $_POST['c_class_collect'] == 'on '){
+    if (isset($_POST['c_class_collect']) && $_POST['c_class_collect'] == 'on'){
 	$class_collect = 1;
 	$user_data["user_class"] = "COL";
 	$request = "UPDATE ".TABLE_USER." SET user_class='COL'";
@@ -105,10 +105,10 @@ if(isset($_POST['s_save']) || isset($_POST['techno_energie'])) {
 	$db->sql_query($request);
 	}
 	
-    if (isset($_POST['c_class_collect']) && $_POST['c_class_collect'] == 'off '){
+    if (isset($_POST['c_class_collect']) && $_POST['c_class_collect'] == 'off'){
 	$class_collect = 0;
 	$user_data["user_class"] = "none";
-	$request = "UPDATE ".TABLE_USER." SET user_class='none'";
+	$request = "UPDATE ".TABLE_USER." SET user_class='COL'";
 	$request .= " WHERE user_id = ".$user_data["user_id"];
 	$db->sql_query($request);
 	}
@@ -138,6 +138,8 @@ while ($row = $db->sql_fetch_assoc($quet)) {
 $officier = $user_data['off_commandant'] + $user_data['off_amiral'] + $user_data['off_ingenieur']
           + $user_data['off_geologue'] + $user_data['off_technocrate'];
 $off_full = ($officier == 5) ? '1' : '0';
+
+$class_collect = ($user_data['user_class'] == 'COL') ? '1' : '0';
 echo "<input type='hidden' id='vitesse_uni' size='2' maxlength='5' value='".$server_config['speed_uni']."'/>";
 echo "<input type='hidden' id='off_ingenieur' value='".$user_data["off_ingenieur"]."'/>";
 echo "<input type='hidden' id='off_geologue' value='".$user_data["off_geologue"]."'/>";
@@ -268,8 +270,6 @@ function verif_donnee(envoye) {
 	document.getElementById('class_collect').value = 0;
 	if (document.getElementById('c_class_collect').checked) {
 		document.getElementById('class_collect').value = 1;
-	} else {
-		document.getElementById('class_collect').value = 0;
 	}
     
 	if(envoye == 1) {
