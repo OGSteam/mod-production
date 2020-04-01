@@ -62,7 +62,9 @@ IV/ Versions
 1.5.3 [2015-06-29]= Amélioration, refacctoring js + use OGSpy js
 1.5.4 [2017-04-15]= La fonction requiert un user_id
 1.5.5 [2018-10-23]= Version OGSpy Minimale
-1.5.6 [2019-xx-xx]= Nouveau fichier de gestion
+1.5.6 [2019-09-18]= Nouveau fichier de gestion
+1.5.7 [2020-03-16]= Nouveau fichier de gestion
+1.5.8 [2020-xx-xx]= Nouveau fichier de gestion
 
 V/ Informations et liens
 Les bugs seront renseignés sur github (https://github.com/OGSteam/mod-production/issues/new) ou sur le forum avec comme objet :

@@ -681,6 +681,7 @@ for ($i=$start ; $i<=$nb_planet ; $i++) {
 <br/>
 <?php
 echo "<div align=center><font size='2'>".sprintf($lang['prod_created_by'],$mod_version,$creator_name,$modifier_name1,$modifier_name2,$modifier_name3)."</font><br />".
+1.5.6 [2019-xx-xx]= Nouveau fichier de gestion
 "<div align=center><font size='2'>".sprintf($lang['prod_updated_by'],$mod_version,$updator_name)."</font><br />".
 	"<font size='1'><a href='".$forum_link."' target='_blank'>".$lang['prod_forum']."</a>.</font></div>";
 require_once("views/page_tail.php");
