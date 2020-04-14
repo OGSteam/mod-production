@@ -147,6 +147,12 @@ echo "<input type='hidden' id='off_full' value='".$off_full."'/>";
 echo "<input type='hidden' id='class_collect' value='".$class_collect."'/>";
 
 $vitesse = $server_config['speed_uni'];
+//Binu : Correction calcul du nombre de cases utilisées
+for ($i = $start ; $i <= $nb_planet ; $i++){
+	$binu_fields_used[$i] = $user_building[$i]['M'] + $user_building[$i]['C'] + $user_building[$i]['D'] + $user_building[$i]['CES'] + $user_building[$i]['CEF'] + $user_building[$i]['UdR'] + $user_building[$i]['UdN'] + $user_building[$i]['CSp'] + $user_building[$i]['HM'] + $user_building[$i]['HC'] + $user_building[$i]['HD'] + $user_building[$i]['Lab'] + $user_building[$i]['Ter'] + $user_building[$i]['Ddr'] + $user_building[$i]['Silo'] + $user_building[$i]['Dock'] + $user_building[$i]['BaLu'] + $user_building[$i]['Pha'] + $user_building[$i]['PoSa'];
+}
+//Fin correction
+
 ?>
 <script type="text/javascript" src="js/ogame_formula.js"></script>
 <!-- DEBUT DU SCRIPT -->
@@ -406,7 +412,9 @@ for(i=start ; i<=nb_planet ; i++) {
             	D_prod = D_prod + D_1_prod[i];
 		}
         }
-		cases[i] = cases_base[j] + donnee['M'][i] + donnee['C'][i] + donnee['D'][i] + donnee['SoP'][i] + donnee['FR'][i];
+		//Binu retrait des 100 cases ajoutées pour afficher correctement la couleur
+		cases[i] = cases_base[j] + donnee['M'][i] + donnee['C'][i] + donnee['D'][i] + donnee['SoP'][i] + donnee['FR'][i] - 100;
+		//Fin correction
     }
 }
 
@@ -416,15 +424,18 @@ deut_heure[nb_planet+1] = D_prod;
 
 ecrire();
 }
+
 function ecrire() {
 <?php
 for ($i=$start;$i<=$nb_planet;$i++) {
 	if ($Planete[$i] == 1) {
 		echo "if (batimentsOGSpy['".$i."'][16] == 1) {\n";
 		echo "\tif (ratio[".$i."] == 1) couleur = 'lime';\n\telse couleur = 'red';\n";
-		echo "\tif (cases[".$i."] <= ".$user_building[$i]["fields"].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
+		// echo "\tif (cases[".$i."] <= ".$user_building[$i]["fields"].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
+		echo "\tif (cases[".$i."] <= ".$binu_fields_used[$i].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
 		echo "\tdocument.getElementById('fact".$i."').innerHTML = '<font color=\'' + couleur + '\'>' + ratio[".$i."] + '</font>';\n";
-		echo "\tdocument.getElementById('cases".$i."').innerHTML = '<font color=\'' + couleur2 + '\'>' + format(".$user_building[$i]["fields_used"].") + '</font>';\n";
+		// echo "\tdocument.getElementById('cases".$i."').innerHTML = '<font color=\'' + couleur2 + '\'>' + format(".$user_building[$i]["fields_used"].") + '</font>';\n";
+		echo "\tdocument.getElementById('cases".$i."').innerHTML = '<font color=\'' + couleur2 + '\'>' + format(".$binu_fields_used[$i].") + '</font>';\n";
 		echo "\tdocument.getElementById('cases_tot".$i."').innerHTML = format(".$user_building[$i]["fields"].");\n";
 		echo "\tdocument.getElementById('energie".$i."').innerHTML = '<font color=\'' + couleur + '\'>' + format(energie[".$i."]) + '</font>';\n";
 		echo "\tdocument.getElementById('energie_tot".$i."').innerHTML = format(energie_tot[".$i."]);\n";
@@ -475,7 +486,7 @@ window.onload = function () {Biper(); chargement();}
 
 <form name="Save" method="post" action="">
 <input id='s_save' type='hidden' value='0'>
-<table id="simu" width="100%" title="<?php echo $nb_planete_reel;?>">
+<table id="simu" width="100%">
 <tr>
 	<td class="c"><?php echo $lang['prod_uction_mod'];?>&nbsp;
 		<input type='submit' value='<?php echo $lang['prod_save'];?>' onClick='javascript:verif_donnee(1)'>&nbsp;
@@ -519,7 +530,7 @@ echo "\t<th><a>".$lang['prod_fields']."</a></th>\n";    //Cases
 for ($i=$start ; $i<=$nb_planet ; $i++) {
     $fields = $user_building[$i]["fields"];
 	if ($fields == "0") $fields = "?";
-    
+    $correction_fields = $fields-100;
     echo "\t<th><font color='lime'><span id='cases".$i."'>".$fields."</span></font> / ";
     echo "<font color='lime'><span id='cases_tot".$i."'>".$user_building[$i]["fields_used"]."</span></font></th>\n";
 }
