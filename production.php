@@ -372,15 +372,15 @@ for(i=start ; i<=nb_planet ; i++) {
         }
         if(ratio_conso > 0){
 	if (class_collect.value == "1") {
-	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 	} else {
 
 
-	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 	}
 
 
@@ -480,7 +480,8 @@ var str = x.toString(), n = str.length;
 if (n < 4) return (signe + x);
 else return (signe + ((n % 3) ? str.substr(0, n % 3) + '&nbsp;' : '')) + str.substr(n % 3).match(new RegExp('[0-9]{3}', 'g')).join('&nbsp;');
 }
-window.onload = function () {Biper(); chargement();}
+//window.onload = function () {Biper(); chargement();}
+window.onload = function () { chargement();}
 </script>
 <!-- FIN DU SCRIPT -->
 
@@ -567,7 +568,7 @@ echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
         echo "<input type='text' id='".$bati[6].$i."' name='".$bati[6].$i."' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'>";
         echo "<input type='hidden' name='planete".$i."' value='".$Planete[$i]."'>";
         echo "<a style='cursor: pointer; vertical-align: middle;' onClick='javascript:add(6,".$i.",1)'>+</a>\n";
-		echo "\t\t<select id='rap_".$bati[6].$i."' name='rap_".$bati[6].$i."' onChange='javascript:add (6,".$i.",1)'>";
+		echo "\t\t<select id='rap_".$bati[6].$i."' name='rap_".$bati[6].$i."' onChange='javascript:verif_donnee(0)'>";
 		for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
 		echo "</select></th>\n";
 	}
@@ -580,8 +581,14 @@ echo "<tr><th><a>".$lang['prod_FO']."</a></th>";
         echo "<input type='text' id='".$bati[7].$i."' name='".$bati[7].$i."' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'>";
         echo "<input type='hidden' name='planete".$i."' value='".$Planete[$i]."'>";
         echo "<a style='cursor: pointer; vertical-align: middle;' onClick='javascript:add(7,".$i.",1)'>+</a>\n";
-		echo "\t\t<select id='rap_".$bati[7].$i."' name='rap_".$bati[6].$i."' onChange='javascript:add (7,".$i.",1)'>";
-		for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		echo "\t\t<select id='rap_".$bati[7].$i."' name='rap_".$bati[6].$i."' onChange='javascript:verif_donnee(0)'>";
+	
+		if ($class_collect == 1){
+			for ($j=150 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		} else {
+		
+			for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		}
 		echo "</select></th>\n";
 	}
 	echo "</tr>";
