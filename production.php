@@ -12,7 +12,6 @@
 if (!defined('IN_SPYOGAME')) die("Hacking attempt");
 
 require_once("views/page_header.php");
-
 $start = 101;
 $nb_planete_reel = find_nb_planete_user($user_data["user_id"]);
 $nb_planet = $start + $nb_planete_reel - 1;
@@ -181,10 +180,11 @@ for ($i=$start;$i<=$nb_planet;$i++) {
 			$user_percentage[$i]['CES_percentage']."','".
 			$user_percentage[$i]['CEF_percentage']."','".
 			$user_percentage[$i]['Sat_percentage']."','".
-			$user_percentage[$i]['FOR_percentage']."',1);\n";
+			$user_percentage[$i]['FOR_percentage']."','".
+			$user_building[$i]['coordinates']."',1);\n";
 	} else {
 		$Planete[$i] = 0;
-		echo "batimentsOGSpy[".$i."] = new Array('','','','','','','','','','','','','','','','',0);\n";
+	echo "batimentsOGSpy[".$i."] = new Array('','','','','','','','','','','','','','','','',0);\n";
 	}
 }
 echo "vitesse = ".$vitesse.";\n";
@@ -192,7 +192,8 @@ echo "vitesse = ".$vitesse.";\n";
 bati = new Array('','M','C','D','SoP','FR','SS','FO');
 
 function chargement() {
-	temp = new Array('',9,10,11,12,13,14,15);
+
+	temp = new Array('',9,10,11,12,13,14,15,16);
 	for(i=start ; i<=nb_planet ; i++) {
 		for(b=1 ; b<=7 ; b++) {
 			document.getElementById(bati[b]+i).value = batimentsOGSpy[i][b];
@@ -339,7 +340,7 @@ var F_prod_M = 0;
 var F_prod_C = 0;
 var F_prod_D = 0;
 for(i=start ; i<=nb_planet ; i++) {
-    if (batimentsOGSpy[i][16] == 1) {
+    if (batimentsOGSpy[i][17] == 1) {
         temperature_max_1 = batimentsOGSpy[i][8];
         
         var M_1_conso = Math.round(consumption("M", donnee['M'][i]) * donnee['rap_M'][i] / 100);
@@ -363,7 +364,94 @@ for(i=start ; i<=nb_planet ; i++) {
         
         var NRJ_1_delta = NRJ_1 - energie_conso;
         if(isNaN(NRJ_1)) NRJ_1 = 0;
-        
+
+	//Prise en compte positions
+	var position = ogame_findPlanetPosition(batimentsOGSpy[i][16]);
+	switch (position){
+		case '1':
+			CofM="1";
+			CofC="1.4";
+			CofD="1";
+			break;
+		case '2':
+			CofM="1";
+			CofC="1.3";
+			CofD="1";
+			break;
+		case '3':
+			CofM="1";
+			CofC="1.2";
+			CofD="1";
+			break;
+		case '4':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '5':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '6':
+			CofM="1.17";
+			CofC="1";
+			CofD="1";
+			break;
+		case '7':
+			CofM="1.23";
+			CofC="1";
+			CofD="1";
+			break;
+		case '8':
+			CofM="1.35";
+			CofC="1";
+			CofD="1";
+			break;
+		case '9':
+			CofM="1.23";
+			CofC="1";
+			CofD="1";
+			break;
+		case '10':
+			CofM="1.17";
+			CofC="1";
+			CofD="1";
+			break;
+		case '11':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '12':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '13':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '14':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '15':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+
+		default:
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+	}
+
+
         //Ratio de consommation d'énergie
         var ratio_conso = 0;
         if(energie_conso != 0) {
@@ -372,22 +460,22 @@ for(i=start ; i<=nb_planet ; i++) {
         }
         if(ratio_conso > 0){
 	if (class_collect.value == "1") {
-	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	F_prod_M = Math.round(CofM * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(CofC * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(CofD * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 	} else {
 
 
-	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	F_prod_M = Math.round(CofM * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(CofC * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(CofD * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 	}
 
 
 
-            M_1_prod[i] = Math.round(ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100) + F_prod_M;
-            C_1_prod[i] = Math.round(ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100) + F_prod_C;
-            D_1_prod[i] = Math.round(ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100) + F_prod_D;
+            M_1_prod[i] = Math.round(CofM * ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100) + F_prod_M;
+            C_1_prod[i] = Math.round(CofC * ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100) + F_prod_C;
+            D_1_prod[i] = Math.round(CofD * ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100) + F_prod_D;
         } else {
             M_1_prod[i] = Math.round(production("M", 0, 0, 0));
             C_1_prod[i] = Math.round(production("C", 0, 0, 0));
@@ -429,7 +517,7 @@ function ecrire() {
 <?php
 for ($i=$start;$i<=$nb_planet;$i++) {
 	if ($Planete[$i] == 1) {
-		echo "if (batimentsOGSpy['".$i."'][16] == 1) {\n";
+		echo "if (batimentsOGSpy['".$i."'][17] == 1) {\n";
 		echo "\tif (ratio[".$i."] == 1) couleur = 'lime';\n\telse couleur = 'red';\n";
 		// echo "\tif (cases[".$i."] <= ".$user_building[$i]["fields"].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
 		echo "\tif (cases[".$i."] <= ".$binu_fields_used[$i].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
