@@ -348,12 +348,21 @@ for(i=start ; i<=nb_planet ; i++) {
         var D_1_conso = Math.round(consumption("D", donnee['D'][i]) * donnee['rap_D'][i] / 100);
 	
 	var nb_F_1 = 0;	
+	var FO_surprod = 1;
 	if ( donnee['FO'][i] > (donnee['M'][i] + donnee['C'][i] + donnee['D'][i]) * 8) {
 		nb_F_1 = (donnee['M'][i] + donnee['C'][i] + donnee['D'][i]) * 8;
 	} else {
 		nb_F_1 = donnee['FO'][i];	
 	}
-	var F_1_conso = Math.round(consumption("FOR", nb_F_1) * donnee['rap_FO'][i] / 100);
+	//Calcul consommation avec rapport > 100
+	if ( donnee['rap_FO'][i] > 100) {
+		FO_surprod = Math.round(donnee['rap_FO'][i] * 2) - 100;
+		var F_1_conso = Math.round(consumption("FOR", nb_F_1) * FO_surprod / 100);
+	} else {
+		FO_surprod = Math.round(donnee['rap_FO'][i]);
+		var F_1_conso = Math.round(consumption("FOR", nb_F_1) * donnee['rap_FO'][i] / 100);
+	}
+
         var energie_conso = M_1_conso + C_1_conso + D_1_conso + F_1_conso;
         
         var CES_1_production = production("CES", donnee['SoP'][i], temperature_max_1, NRJ) * donnee['rap_SoP'][i] / 100;
