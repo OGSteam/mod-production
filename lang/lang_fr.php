@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
-*	filename	: lang_fr.php
+*	filename	: lang_cdr.php
 *	package		: Mod Production
 *	version		: 1.4
 *	desc.			: Liste des chaines pour la langue Française.
