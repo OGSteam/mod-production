@@ -148,7 +148,7 @@ echo "<input type='hidden' id='class_collect' value='".$class_collect."'/>";
 $vitesse = $server_config['speed_uni'];
 //Binu : Correction calcul du nombre de cases utilisées
 for ($i = $start ; $i <= $nb_planet ; $i++){
-	$binu_fields_used[$i] = $user_building[$i]['M'] + $user_building[$i]['C'] + $user_building[$i]['D'] + $user_building[$i]['CES'] + $user_building[$i]['CEF'] + $user_building[$i]['UdR'] + $user_building[$i]['UdN'] + $user_building[$i]['CSp'] + $user_building[$i]['HM'] + $user_building[$i]['HC'] + $user_building[$i]['HD'] + $user_building[$i]['Lab'] + $user_building[$i]['Ter'] + $user_building[$i]['Ddr'] + $user_building[$i]['Silo'] + $user_building[$i]['BaLu'] + $user_building[$i]['Pha'] + $user_building[$i]['PoSa'];
+	$binu_fields_used[$i] = $user_building[$i]['M'] + $user_building[$i]['C'] + $user_building[$i]['D'] + $user_building[$i]['CES'] + $user_building[$i]['CEF'] + $user_building[$i]['UdR'] + $user_building[$i]['UdN'] + $user_building[$i]['CSp'] + $user_building[$i]['HM'] + $user_building[$i]['HC'] + $user_building[$i]['HD'] + $user_building[$i]['Lab'] + $user_building[$i]['Ter'] + $user_building[$i]['DdR'] + $user_building[$i]['Silo'] + $user_building[$i]['BaLu'] + $user_building[$i]['Pha'] + $user_building[$i]['PoSa'];
 }
 //Fin correction
 
