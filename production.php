@@ -12,7 +12,6 @@
 if (!defined('IN_SPYOGAME')) die("Hacking attempt");
 
 require_once("views/page_header.php");
-
 $start = 101;
 $nb_planete_reel = find_nb_planete_user($user_data["user_id"]);
 $nb_planet = $start + $nb_planete_reel - 1;
@@ -149,7 +148,7 @@ echo "<input type='hidden' id='class_collect' value='".$class_collect."'/>";
 $vitesse = $server_config['speed_uni'];
 //Binu : Correction calcul du nombre de cases utilisées
 for ($i = $start ; $i <= $nb_planet ; $i++){
-	$binu_fields_used[$i] = $user_building[$i]['M'] + $user_building[$i]['C'] + $user_building[$i]['D'] + $user_building[$i]['CES'] + $user_building[$i]['CEF'] + $user_building[$i]['UdR'] + $user_building[$i]['UdN'] + $user_building[$i]['CSp'] + $user_building[$i]['HM'] + $user_building[$i]['HC'] + $user_building[$i]['HD'] + $user_building[$i]['Lab'] + $user_building[$i]['Ter'] + $user_building[$i]['Ddr'] + $user_building[$i]['Silo'] + $user_building[$i]['BaLu'] + $user_building[$i]['Pha'] + $user_building[$i]['PoSa'];
+	$binu_fields_used[$i] = $user_building[$i]['M'] + $user_building[$i]['C'] + $user_building[$i]['D'] + $user_building[$i]['CES'] + $user_building[$i]['CEF'] + $user_building[$i]['UdR'] + $user_building[$i]['UdN'] + $user_building[$i]['CSp'] + $user_building[$i]['HM'] + $user_building[$i]['HC'] + $user_building[$i]['HD'] + $user_building[$i]['Lab'] + $user_building[$i]['Ter'] + $user_building[$i]['DdR'] + $user_building[$i]['Silo'] + $user_building[$i]['BaLu'] + $user_building[$i]['Pha'] + $user_building[$i]['PoSa'];
 }
 //Fin correction
 
@@ -181,10 +180,11 @@ for ($i=$start;$i<=$nb_planet;$i++) {
 			$user_percentage[$i]['CES_percentage']."','".
 			$user_percentage[$i]['CEF_percentage']."','".
 			$user_percentage[$i]['Sat_percentage']."','".
-			$user_percentage[$i]['FOR_percentage']."',1);\n";
+			$user_percentage[$i]['FOR_percentage']."','".
+			$user_building[$i]['coordinates']."',1);\n";
 	} else {
 		$Planete[$i] = 0;
-		echo "batimentsOGSpy[".$i."] = new Array('','','','','','','','','','','','','','','','',0);\n";
+	echo "batimentsOGSpy[".$i."] = new Array('','','','','','','','','','','','','','','','',0);\n";
 	}
 }
 echo "vitesse = ".$vitesse.";\n";
@@ -192,7 +192,8 @@ echo "vitesse = ".$vitesse.";\n";
 bati = new Array('','M','C','D','SoP','FR','SS','FO');
 
 function chargement() {
-	temp = new Array('',9,10,11,12,13,14,15);
+
+	temp = new Array('',9,10,11,12,13,14,15,16);
 	for(i=start ; i<=nb_planet ; i++) {
 		for(b=1 ; b<=7 ; b++) {
 			document.getElementById(bati[b]+i).value = batimentsOGSpy[i][b];
@@ -339,7 +340,7 @@ var F_prod_M = 0;
 var F_prod_C = 0;
 var F_prod_D = 0;
 for(i=start ; i<=nb_planet ; i++) {
-    if (batimentsOGSpy[i][16] == 1) {
+    if (batimentsOGSpy[i][17] == 1) {
         temperature_max_1 = batimentsOGSpy[i][8];
         
         var M_1_conso = Math.round(consumption("M", donnee['M'][i]) * donnee['rap_M'][i] / 100);
@@ -347,12 +348,21 @@ for(i=start ; i<=nb_planet ; i++) {
         var D_1_conso = Math.round(consumption("D", donnee['D'][i]) * donnee['rap_D'][i] / 100);
 	
 	var nb_F_1 = 0;	
+	var FO_surprod = 1;
 	if ( donnee['FO'][i] > (donnee['M'][i] + donnee['C'][i] + donnee['D'][i]) * 8) {
 		nb_F_1 = (donnee['M'][i] + donnee['C'][i] + donnee['D'][i]) * 8;
 	} else {
 		nb_F_1 = donnee['FO'][i];	
 	}
-	var F_1_conso = Math.round(consumption("FOR", nb_F_1) * donnee['rap_FO'][i] / 100);
+	//Calcul consommation avec rapport > 100
+	if ( donnee['rap_FO'][i] > 100) {
+		FO_surprod = Math.round(donnee['rap_FO'][i] * 2) - 100;
+		var F_1_conso = Math.round(consumption("FOR", nb_F_1) * FO_surprod / 100);
+	} else {
+		FO_surprod = Math.round(donnee['rap_FO'][i]);
+		var F_1_conso = Math.round(consumption("FOR", nb_F_1) * donnee['rap_FO'][i] / 100);
+	}
+
         var energie_conso = M_1_conso + C_1_conso + D_1_conso + F_1_conso;
         
         var CES_1_production = production("CES", donnee['SoP'][i], temperature_max_1, NRJ) * donnee['rap_SoP'][i] / 100;
@@ -363,7 +373,94 @@ for(i=start ; i<=nb_planet ; i++) {
         
         var NRJ_1_delta = NRJ_1 - energie_conso;
         if(isNaN(NRJ_1)) NRJ_1 = 0;
-        
+
+	//Prise en compte positions
+	var position = ogame_findPlanetPosition(batimentsOGSpy[i][16]);
+	switch (position){
+		case '1':
+			CofM="1";
+			CofC="1.4";
+			CofD="1";
+			break;
+		case '2':
+			CofM="1";
+			CofC="1.3";
+			CofD="1";
+			break;
+		case '3':
+			CofM="1";
+			CofC="1.2";
+			CofD="1";
+			break;
+		case '4':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '5':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '6':
+			CofM="1.17";
+			CofC="1";
+			CofD="1";
+			break;
+		case '7':
+			CofM="1.23";
+			CofC="1";
+			CofD="1";
+			break;
+		case '8':
+			CofM="1.35";
+			CofC="1";
+			CofD="1";
+			break;
+		case '9':
+			CofM="1.23";
+			CofC="1";
+			CofD="1";
+			break;
+		case '10':
+			CofM="1.17";
+			CofC="1";
+			CofD="1";
+			break;
+		case '11':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '12':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '13':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '14':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+		case '15':
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+
+		default:
+			CofM="1";
+			CofC="1";
+			CofD="1";
+			break;
+	}
+
+
         //Ratio de consommation d'énergie
         var ratio_conso = 0;
         if(energie_conso != 0) {
@@ -372,22 +469,22 @@ for(i=start ; i<=nb_planet ; i++) {
         }
         if(ratio_conso > 0){
 	if (class_collect.value == "1") {
-	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0003 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	F_prod_M = Math.round(CofM * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(CofC * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(CofD * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 	} else {
 
 
-	F_prod_M = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(ratio_conso * nb_F_1 * 0.0002 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+	F_prod_M = Math.round(CofM * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	F_prod_C = Math.round(CofC * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	F_prod_D = Math.round(CofD * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 	}
 
 
 
-            M_1_prod[i] = Math.round(ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100) + F_prod_M;
-            C_1_prod[i] = Math.round(ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100) + F_prod_C;
-            D_1_prod[i] = Math.round(ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100) + F_prod_D;
+            M_1_prod[i] = Math.round(CofM * ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100) + F_prod_M;
+            C_1_prod[i] = Math.round(CofC * ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100) + F_prod_C;
+            D_1_prod[i] = Math.round(CofD * ratio_conso * production("D", donnee['D'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_D'][i] / 100) - Math.round(consumption("CEF", donnee['FR'][i]) * donnee['rap_FR'][i] / 100) + F_prod_D;
         } else {
             M_1_prod[i] = Math.round(production("M", 0, 0, 0));
             C_1_prod[i] = Math.round(production("C", 0, 0, 0));
@@ -429,7 +526,7 @@ function ecrire() {
 <?php
 for ($i=$start;$i<=$nb_planet;$i++) {
 	if ($Planete[$i] == 1) {
-		echo "if (batimentsOGSpy['".$i."'][16] == 1) {\n";
+		echo "if (batimentsOGSpy['".$i."'][17] == 1) {\n";
 		echo "\tif (ratio[".$i."] == 1) couleur = 'lime';\n\telse couleur = 'red';\n";
 		// echo "\tif (cases[".$i."] <= ".$user_building[$i]["fields"].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
 		echo "\tif (cases[".$i."] <= ".$binu_fields_used[$i].") couleur2 = 'lime';\n\telse couleur2 = 'red';\n";
@@ -480,7 +577,8 @@ var str = x.toString(), n = str.length;
 if (n < 4) return (signe + x);
 else return (signe + ((n % 3) ? str.substr(0, n % 3) + '&nbsp;' : '')) + str.substr(n % 3).match(new RegExp('[0-9]{3}', 'g')).join('&nbsp;');
 }
-window.onload = function () {Biper(); chargement();}
+//window.onload = function () {Biper(); chargement();}
+window.onload = function () { chargement();}
 </script>
 <!-- FIN DU SCRIPT -->
 
@@ -567,7 +665,7 @@ echo "<tr><th><a>".$lang['prod_SS']."</a></th>";
         echo "<input type='text' id='".$bati[6].$i."' name='".$bati[6].$i."' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'>";
         echo "<input type='hidden' name='planete".$i."' value='".$Planete[$i]."'>";
         echo "<a style='cursor: pointer; vertical-align: middle;' onClick='javascript:add(6,".$i.",1)'>+</a>\n";
-		echo "\t\t<select id='rap_".$bati[6].$i."' name='rap_".$bati[6].$i."' onChange='javascript:add (6,".$i.",1)'>";
+		echo "\t\t<select id='rap_".$bati[6].$i."' name='rap_".$bati[6].$i."' onChange='javascript:verif_donnee(0)'>";
 		for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
 		echo "</select></th>\n";
 	}
@@ -580,8 +678,14 @@ echo "<tr><th><a>".$lang['prod_FO']."</a></th>";
         echo "<input type='text' id='".$bati[7].$i."' name='".$bati[7].$i."' size='2' maxlength='6' onBlur='javascript:verif_donnee(0)' value='0'>";
         echo "<input type='hidden' name='planete".$i."' value='".$Planete[$i]."'>";
         echo "<a style='cursor: pointer; vertical-align: middle;' onClick='javascript:add(7,".$i.",1)'>+</a>\n";
-		echo "\t\t<select id='rap_".$bati[7].$i."' name='rap_".$bati[6].$i."' onChange='javascript:add (7,".$i.",1)'>";
-		for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		echo "\t\t<select id='rap_".$bati[7].$i."' name='rap_".$bati[6].$i."' onChange='javascript:verif_donnee(0)'>";
+	
+		if ($class_collect == 1){
+			for ($j=150 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		} else {
+		
+			for ($j=100 ; $j>=0 ; $j=$j-10) echo "<option value='".$j."'>".$j."%</option>";
+		}
 		echo "</select></th>\n";
 	}
 	echo "</tr>";
