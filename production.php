@@ -468,19 +468,16 @@ for(i=start ; i<=nb_planet ; i++) {
             if(ratio_conso > 1) ratio_conso = 1;
         }
         if(ratio_conso > 0){
+            BonusMaxForeuse = 0.5;
 	if (class_collect.value == "1") {
-	F_prod_M = Math.round(CofM * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(CofC * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(CofD * ratio_conso * nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+            BonusForeuse = Math.min(nb_F_1 * 0.0003 * donnee['rap_FO'][i] / 100, BonusMaxForeuse);
 	} else {
-
-
-	F_prod_M = Math.round(CofM * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
-	F_prod_C = Math.round(CofC * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
-	F_prod_D = Math.round(CofD * ratio_conso * nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100 * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
+            BonusForeuse = Math.min(nb_F_1 * 0.0002 * donnee['rap_FO'][i] / 100, BonusMaxForeuse);
 	}
 
-
+            F_prod_M = Math.round(CofM * ratio_conso * BonusForeuse * Math.floor(speed * 30 * donnee['M'][i] * Math.pow(1.1,donnee['M'][i]) * (1)));
+	        F_prod_C = Math.round(CofC * ratio_conso * BonusForeuse * Math.floor(speed * 20 * donnee['C'][i] * Math.pow(1.1,donnee['C'][i]) * (1)));
+	        F_prod_D = Math.round(CofD * ratio_conso * BonusForeuse * Math.floor(speed * 10 * donnee['D'][i] * Math.pow(1.1,donnee['D'][i]) * (1.44 - 0.004 * temperature_max_1 ) * (1)));
 
             M_1_prod[i] = Math.round(CofM * ratio_conso * production("M", donnee['M'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_M'][i] / 100) + F_prod_M;
             C_1_prod[i] = Math.round(CofC * ratio_conso * production("C", donnee['C'][i], temperature_max_1, NRJ, Plasma) * donnee['rap_C'][i] / 100) + F_prod_C;
