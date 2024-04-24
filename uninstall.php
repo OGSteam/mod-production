@@ -10,5 +10,5 @@
 if (!defined('IN_SPYOGAME')) die("Hacking attempt");
 
 $mod_uninstall_name = "production";
-uninstall_mod($mod_unistall_name,$mod_uninstall_table);
+uninstall_mod($mod_uninstall_name); 
 ?>
