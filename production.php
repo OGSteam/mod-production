@@ -625,7 +625,7 @@ echo "\t<th><a>".$lang['prod_fields']."</a></th>\n";    //Cases
 for ($i=$start ; $i<=$nb_planet ; $i++) {
     $fields = $user_building[$i]["fields"];
 	if ($fields == "0") $fields = "?";
-    $correction_fields = $fields-100;
+    //$correction_fields = $fields-100;
     echo "\t<th><font color='lime'><span id='cases".$i."'>".$fields."</span></font> / ";
     echo "<font color='lime'><span id='cases_tot".$i."'>".$user_building[$i]["fields_used"]."</span></font></th>\n";
 }
